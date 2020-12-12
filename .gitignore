@@ -1,0 +1,7 @@
+/vendor
+/.idea
+/coverage
+report.*
+.phpunit.result.cache
+.php_cs.cache
+junit.xml
