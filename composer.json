@@ -1,57 +1,63 @@
 {
-  "name": "bristol-su/portal-auth",
-  "description": "Authentication for Portal SDK based software",
-  "license": "GPL-3.0-or-later",
-  "prefer-stable": true,
-  "keywords": [
-    "portal",
-    "sdk",
-    "bristol su",
-    "auth",
-    "login"
-  ],
-  "authors": [
-    {
-      "name": "Toby Twigger",
-      "email": "toby.twigger@bristol.ac.uk"
-    }
-  ],
-  "type": "library",
-  "require": {
-    "php": "^7.4",
-    "laravel/framework": "^8.0",
-    "laravel/passport": "^10.0",
-    "bristol-su/control": "dev-laravel-8",
-    "doctrine/dbal": "^2.10"
-
-  },
-  "require-dev": {
-    "orchestra/testbench": "^6.0",
-    "phpstan/phpstan": "^0.12.3",
-    "brianium/paratest": "^4.0",
-    "phpspec/prophecy-phpunit": "^2.0",
-    "nunomaduro/phpinsights": "^1.14"
-  },
-  "autoload": {
-    "files": [
-      "src/helpers/helpers.php"
+    "name": "bristol-su/portal-auth",
+    "description": "Authentication for Portal SDK based software",
+    "license": "GPL-3.0-or-later",
+    "prefer-stable": true,
+    "keywords": [
+        "portal",
+        "sdk",
+        "bristol su",
+        "auth",
+        "login"
     ],
-    "psr-4": {
-      "BristolSU\\Auth\\": "src/",
-      "Database\\Factories\\": "database/factories/",
-      "Database\\Seeders\\": "database/seeders/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "BristolSU\\Support\\Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "BristolSU\\Auth\\AuthServiceProvider"
-      ]
-    }
-  }
+    "authors": [
+        {
+            "name": "Toby Twigger",
+            "email": "toby.twigger@bristol.ac.uk"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "php": "^7.4",
+        "laravel/framework": "^8.0",
+        "laravel/passport": "^10.0",
+        "bristol-su/control": "dev-laravel-8",
+        "bristol-su/support": "dev-portal-227",
+        "doctrine/dbal": "^2.10",
+        "linkeys/signed-url": "^3.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpstan/phpstan": "^0.12.3",
+        "brianium/paratest": "^4.0",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "nunomaduro/phpinsights": "^1.14",
+        "laravel/legacy-factories": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BristolSU\\Auth\\": "src/",
+            "Database\\Auth\\Factories\\": "database/factories/",
+            "Database\\Auth\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BristolSU\\Auth\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BristolSU\\Auth\\AuthServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./../support"
+        }
+    ]
 }
