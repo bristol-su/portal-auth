@@ -2,14 +2,16 @@
 
 namespace BristolSU\Auth\Authentication;
 
+use BristolSU\Auth\Settings\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository;
 use BristolSU\ControlDB\Contracts\Repositories\DataUser;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class AuthenticationUserProvider implements \Illuminate\Contracts\Auth\UserProvider
+class AuthenticationUserProvider implements UserProvider
 {
 
     /**
@@ -80,25 +82,15 @@ class AuthenticationUserProvider implements \Illuminate\Contracts\Auth\UserProvi
 
         try {
             $dataUser = app(DataUser::class)->getWhere([
-                siteSetting('Authentication.Attributes.Identifier') => $credentials['identifier']
+                IdentifierAttribute::getValue() => $credentials['identifier']
             ]);
-        } catch (ModelNotFoundException $e) {
-            return null;
-        }
-
-        try {
             $controlUser = app(\BristolSU\ControlDB\Contracts\Repositories\User::class)->getByDataProviderId($dataUser->id());
-        } catch (ModelNotFoundException $e) {
-            return null;
-        }
+            return $this->userRepository->getFromControlId($controlUser->id());
 
-        try {
-            $user = $this->userRepository->getFromControlId($controlUser->id());
         } catch (ModelNotFoundException $e) {
-            return null;
         }
+        return null;
 
-        return $user;
     }
 
     /**

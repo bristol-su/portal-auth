@@ -47,7 +47,7 @@ class Web implements AuthenticationUserResolver
      */
     public function setUser(AuthenticationUser $user)
     {
-        $this->auth->guard('web')->login($user);
+        $this->auth->guard('web')->setUser($user);
     }
 
     /**

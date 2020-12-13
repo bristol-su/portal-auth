@@ -89,7 +89,7 @@ class Web implements Authentication
     {
         if ($this->hasGroup()) {
 
-            if ($this->hasRole() !== null) {
+            if ($this->hasRole()) {
                 return $this->getRole()->group();
             }
 
@@ -124,11 +124,13 @@ class Web implements Authentication
      */
     public function getUser()
     {
-        $authenticationUser = $this->authenticationResolver->getUser();
-        if($authenticationUser !== null) {
-            return $this->userRepository->getById(
-                $authenticationUser->controlId()
-            );
+        if($this->authenticationResolver->hasUser()) {
+            try {
+                $authenticationUser = $this->authenticationResolver->getUser();
+                return $this->userRepository->getById(
+                    $authenticationUser->controlId()
+                );
+            } catch (Exception $e) {}
         }
         return null;
     }

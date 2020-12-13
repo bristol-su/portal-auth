@@ -4,13 +4,16 @@ namespace BristolSU\Auth\Tests;
 
 use BristolSU\Auth\AuthServiceProvider;
 use BristolSU\ControlDB\ControlDBServiceProvider;
+use BristolSU\Support\SupportServiceProvider;
 use BristolSU\Support\Testing\AssertsEloquentModels;
+use BristolSU\Support\Testing\HandlesAuthentication;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Linkeys\UrlSigner\Providers\UrlSignerServiceProvider;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use DatabaseMigrations, AssertsEloquentModels;
+    use DatabaseMigrations, AssertsEloquentModels, HandlesAuthentication, ProphecyTrait;
 
     /**
      * Initialise the test case.
@@ -40,6 +43,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             AuthServiceProvider::class,
+            SupportServiceProvider::class,
             ControlDBServiceProvider::class,
             UrlSignerServiceProvider::class
         ];
