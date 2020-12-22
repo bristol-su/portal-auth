@@ -22,7 +22,7 @@
         "laravel/framework": "^8.0",
         "laravel/passport": "^10.0",
         "bristol-su/control": "dev-laravel-8",
-        "bristol-su/support": "dev-portal-227",
+        "bristol-su/support": "dev-portal-v4",
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
         "ext-json": "*"
@@ -54,10 +54,7 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./../support"
-        }
-    ]
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always --process-isolation --verbose --configuration phpunit.xml"
+    }
 }

@@ -7,13 +7,18 @@ use BristolSU\Support\Settings\Definition\Category;
 class AuthCategory extends Category
 {
 
+    public function key(): string
+    {
+        return 'authentication';
+    }
+
     public function name(): string
     {
         return 'Authentication';
     }
 
-    public function icon(): string
+    public function description(): string
     {
-        return 'lock';
+        return 'Settings related to user authentication';
     }
 }

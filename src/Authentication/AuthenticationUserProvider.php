@@ -2,7 +2,7 @@
 
 namespace BristolSU\Auth\Authentication;
 
-use BristolSU\Auth\Settings\Settings\Credentials\IdentifierAttribute;
+use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository;
 use BristolSU\ControlDB\Contracts\Repositories\DataUser;

@@ -9,9 +9,13 @@ use BristolSU\Auth\Authentication\ControlResolver\Web as WebControlResolver;
 use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
+use BristolSU\Auth\Settings\AuthCategory;
+use BristolSU\Auth\Settings\Credentials\CredentialsGroup;
+use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\User\AuthenticationUserRepository;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository as AuthenticationUserRepositoryContract;
 use BristolSU\Support\Authentication\Contracts\Authentication as ControlResolver;
+use BristolSU\Support\Settings\Concerns\RegistersSettings;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +26,7 @@ use Illuminate\Support\ServiceProvider;
  */
 class AuthServiceProvider extends ServiceProvider
 {
+    use RegistersSettings;
 
     /**
      * Register
@@ -78,6 +83,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['router']->pushMiddlewareToGroup('auth', CheckAdditionalCredentialsOwnedByUser::class);
         // TODO Set up portal-auth, portal-guest and portal-confirmed groups.
 
+        $this->registerSettings()
+            ->category(new AuthCategory())
+            ->group(new CredentialsGroup())
+            ->registerSetting(new IdentifierAttribute());
 
     }
 
