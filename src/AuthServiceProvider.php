@@ -9,9 +9,10 @@ use BristolSU\Auth\Authentication\ControlResolver\Web as WebControlResolver;
 use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
-use BristolSU\Auth\Settings\AuthCategory;
+use BristolSU\Auth\Middleware\HasConfirmedPassword;
+use BristolSU\Auth\Middleware\IsAuthenticated;
+use BristolSU\Auth\Middleware\IsGuest;;
 use BristolSU\Auth\Settings\Credentials\CredentialsGroup;
-use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\User\AuthenticationUserRepository;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository as AuthenticationUserRepositoryContract;
 use BristolSU\Support\Authentication\Contracts\Authentication as ControlResolver;
@@ -33,8 +34,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-//        $this->app->register(PassportServiceProvider::class);
-
         $this->app->bind(AuthenticationUserRepositoryContract::class, AuthenticationUserRepository::class);
 
         $this->app->call([$this, 'registerAuthenticationResolver']);
@@ -80,8 +79,18 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['router']->pushMiddlewareToGroup('auth', CheckAdditionalCredentialsOwnedByUser::class);
-        // TODO Set up portal-auth, portal-guest and portal-confirmed groups.
+        $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-guest', IsGuest::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-confirmed', HasConfirmedPassword::class);
+
+        $this->publishes([
+            __DIR__.'/../config/portal-auth.php' => config_path('portal-auth.php'),
+        ]);
+
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/portal-auth.php', 'portal-auth'
+        );
 
         $this->registerSettings()
             ->category(new AuthCategory())
