@@ -32,9 +32,7 @@ class IsAuthenticated
         if($this->authentication->hasUser()) {
             return $next($request);
         }
-        throw new AuthenticationException('Unauthenticated.', [], null);
-        // Do this for guest and password confirmation
-        // Can we handle the exceptions?
+        throw new AuthenticationException();
     }
 
 }

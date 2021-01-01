@@ -11,8 +11,13 @@ use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
 use BristolSU\Auth\Middleware\HasConfirmedPassword;
 use BristolSU\Auth\Middleware\IsAuthenticated;
-use BristolSU\Auth\Middleware\IsGuest;;
+use BristolSU\Auth\Middleware\IsGuest;
+use BristolSU\Auth\Settings\AuthCategory;
 use BristolSU\Auth\Settings\Credentials\CredentialsGroup;
+use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
+use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Settings\Login\LoginGroup;
+use BristolSU\Auth\Settings\Login\PasswordConfirmationTimeout;
 use BristolSU\Auth\User\AuthenticationUserRepository;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository as AuthenticationUserRepositoryContract;
 use BristolSU\Support\Authentication\Contracts\Authentication as ControlResolver;
@@ -96,6 +101,12 @@ class AuthServiceProvider extends ServiceProvider
             ->category(new AuthCategory())
             ->group(new CredentialsGroup())
             ->registerSetting(new IdentifierAttribute());
+
+        $this->registerSettings()
+            ->category(new AuthCategory())
+            ->group(new LoginGroup())
+            ->registerSetting(new DefaultHome())
+            ->registerSetting(new PasswordConfirmationTimeout());
 
     }
 

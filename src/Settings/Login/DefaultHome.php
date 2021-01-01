@@ -4,13 +4,15 @@ namespace BristolSU\Auth\Settings\Login;
 
 use BristolSU\Support\Settings\Definition\UserSetting;
 use FormSchema\Schema\Field;
+use Illuminate\Routing\RouteCollectionInterface;
+use Illuminate\Support\Facades\Route;
 
 class DefaultHome extends UserSetting
 {
 
     public function key(): string
     {
-        // TODO: Implement key() method.
+        return 'authentication.login.default-home';
     }
 
     public function defaultValue()
@@ -20,11 +22,27 @@ class DefaultHome extends UserSetting
 
     public function fieldOptions(): Field
     {
-        // TODO: Implement fieldOptions() method.
+        return \FormSchema\Generator\Field::input($this->inputName())
+            ->inputType('text')
+            ->label('Route Home')
+            ->default($this->defaultValue())
+            ->hint('The default route to send logged in users to')
+            ->help('This must be the name of a route')
+            ->getSchema();
     }
 
     public function rules(): array
     {
-        // TODO: Implement rules() method.
+        return [
+            $this->inputName() => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if(!Route::has($value)) {
+                        $fail(sprintf('The default home is not a valid route name.'));
+                    }
+                }
+            ]
+        ];
     }
 }
