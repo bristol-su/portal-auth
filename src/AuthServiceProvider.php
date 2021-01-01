@@ -89,14 +89,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['router']->pushMiddlewareToGroup('portal-guest', IsGuest::class);
         $this->app['router']->pushMiddlewareToGroup('portal-confirmed', HasConfirmedPassword::class);
 
-        $this->publishes([
-            __DIR__.'/../config/portal-auth.php' => config_path('portal-auth.php'),
-        ]);
-
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/portal-auth.php', 'portal-auth'
-        );
-
         $this->registerSettings()
             ->category(new AuthCategory())
             ->group(new CredentialsGroup())
