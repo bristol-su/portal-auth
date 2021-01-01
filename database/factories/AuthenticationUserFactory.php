@@ -1,27 +1,25 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Auth\Factories;
 
-use App\Auth\User;
-use Faker\Generator as Faker;
+use BristolSU\Auth\User\AuthenticationUser;
+use BristolSU\ControlDB\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+class AuthenticationUserFactory extends Factory
+{
 
-$factory->define(User::class, function(Faker $faker) {
-    return [
-        'email_verified_at' => now(),
-        'password' => \Illuminate\Support\Facades\Hash::make('secret'),
-        'control_id' => function() {
-            return factory(\BristolSU\ControlDB\Models\User::class)->create()->id();
-        },
-    ];
-});
+    protected $model = AuthenticationUser::class;
+
+    public function definition()
+    {
+        return [
+            'email_verified_at' => now(),
+            'password' => Hash::make('secret'),
+            'control_id' => function () {
+                return factory(User::class)->create()->id();
+            },
+        ];
+    }
+}
