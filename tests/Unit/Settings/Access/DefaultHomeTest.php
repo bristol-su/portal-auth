@@ -1,10 +1,10 @@
 <?php
 
 
-namespace BristolSU\Auth\Tests\Unit\Settings\Login;
+namespace BristolSU\Auth\Tests\Unit\Settings\Access;
 
 
-use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Tests\TestCase;
 use FormSchema\Schema\Field;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +21,7 @@ class DefaultHomeTest extends TestCase
     /** @test */
     public function key_returns_the_setting_key(){
         $defaultHome = new DefaultHome();
-        $this->assertEquals('authentication.login.default-home', $defaultHome->key());
+        $this->assertEquals('authentication.access.default-home', $defaultHome->key());
     }
 
     /** @test */

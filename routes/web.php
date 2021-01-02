@@ -2,18 +2,18 @@
 
 
 use BristolSU\Auth\Http\Controllers\Auth\LoginController;
+use BristolSU\Auth\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('portal-guest')->group(function() {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
+
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [RegisterController::class, 'register']);
 });
 
 //Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-//
-//// Registration Routes...
-//Route::get('register', [\App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
-//Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
 //
 //// Email Verification Routes...
 //Route::middleware('auth')->group(function() {

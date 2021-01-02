@@ -3,7 +3,7 @@
 namespace BristolSU\Auth\Tests\Unit\Middleware;
 
 use BristolSU\Auth\Middleware\IsGuest;
-use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Support\Authentication\Contracts\Authentication;
 use Illuminate\Http\Request;

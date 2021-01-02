@@ -3,8 +3,8 @@
 namespace BristolSU\Auth\Http\Controllers\Auth;
 
 use BristolSU\Auth\Http\Controllers\Controller;
-use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
-use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Http\Requests\Auth\LoginRequest;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
@@ -49,12 +49,8 @@ class LoginController extends Controller
      * @return Response|\Symfony\Component\HttpFoundation\Response|void
      * @throws ValidationException
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'identifier' => 'required|string',
-            'password' => 'required|string',
-        ]);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the identifier and

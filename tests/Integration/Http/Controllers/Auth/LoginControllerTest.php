@@ -3,7 +3,7 @@
 namespace BristolSU\Auth\Tests\Integration\Http\Controllers\Auth;
 
 use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
-use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\ControlDB\Models\DataUser;

@@ -13,11 +13,14 @@ use BristolSU\Auth\Middleware\HasConfirmedPassword;
 use BristolSU\Auth\Middleware\HasVerifiedEmail;
 use BristolSU\Auth\Middleware\IsAuthenticated;
 use BristolSU\Auth\Middleware\IsGuest;
+use BristolSU\Auth\Settings\Access\ControlUserRegistrationEnabled;
+use BristolSU\Auth\Settings\Access\DataUserRegistrationEnabled;
+use BristolSU\Auth\Settings\Access\RegistrationEnabled;
 use BristolSU\Auth\Settings\AuthCategory;
 use BristolSU\Auth\Settings\Credentials\CredentialsGroup;
 use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
-use BristolSU\Auth\Settings\Login\DefaultHome;
-use BristolSU\Auth\Settings\Login\LoginGroup;
+use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Auth\Settings\Access\AccessGroup;
 use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Settings\Security\SecurityGroup;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
@@ -104,7 +107,10 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->registerSettings()
             ->category(new AuthCategory())
-            ->group(new LoginGroup())
+            ->group(new AccessGroup())
+            ->registerSetting(new RegistrationEnabled())
+            ->registerSetting(new ControlUserRegistrationEnabled())
+            ->registerSetting(new DataUserRegistrationEnabled())
             ->registerSetting(new DefaultHome());
 
         $this->registerSettings()

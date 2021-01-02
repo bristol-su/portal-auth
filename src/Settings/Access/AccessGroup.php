@@ -1,24 +1,24 @@
 <?php
 
-namespace BristolSU\Auth\Settings\Login;
+namespace BristolSU\Auth\Settings\Access;
 
 use BristolSU\Support\Settings\Definition\Group;
 
-class LoginGroup extends Group
+class AccessGroup extends Group
 {
 
     public function key(): string
     {
-        return 'authentication.login';
+        return 'authentication.access';
     }
 
     public function name(): string
     {
-        return 'Login';
+        return 'Access';
     }
 
     public function description(): string
     {
-        return 'Set up the ways users can log into the site';
+        return 'Set up who can log into the site and how';
     }
 }

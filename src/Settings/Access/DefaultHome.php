@@ -1,6 +1,6 @@
 <?php
 
-namespace BristolSU\Auth\Settings\Login;
+namespace BristolSU\Auth\Settings\Access;
 
 use BristolSU\Support\Settings\Definition\UserSetting;
 use FormSchema\Schema\Field;
@@ -12,7 +12,7 @@ class DefaultHome extends UserSetting
 
     public function key(): string
     {
-        return 'authentication.login.default-home';
+        return 'authentication.access.default-home';
     }
 
     public function defaultValue()

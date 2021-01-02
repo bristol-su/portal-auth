@@ -33,8 +33,7 @@ class IdentifierAttribute extends GlobalSetting
             ->hint('The attribute users can use to log in')
             ->help('You can choose multiple fields to allow users to log in with any field')
             ->values([
-                ['id' => 'email', 'name' => 'Email Address'],
-                ['id' => 'another', 'name' => 'Another Option']
+                ['id' => 'email', 'name' => 'Email Address']
             ])
             ->getSchema();
     }

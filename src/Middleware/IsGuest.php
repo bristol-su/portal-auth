@@ -2,7 +2,7 @@
 
 namespace BristolSU\Auth\Middleware;
 
-use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Support\Authentication\Contracts\Authentication;
 use Illuminate\Http\Request;
 
