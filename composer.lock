@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44f729ca8bcfa359c8f608ba1727c1eb",
+    "content-hash": "dc928c20a9e675eac150ded51d51cc4b",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -213,16 +213,16 @@
         },
         {
             "name": "bristol-su/support",
-            "version": "dev-portal-v4",
+            "version": "dev-portal-226",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/support.git",
-                "reference": "557986501905b81cad06d9178b807ecb1c9c1fe9"
+                "reference": "274f52fa0120cc39712b71227b4b79075fef6658"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/support/zipball/557986501905b81cad06d9178b807ecb1c9c1fe9",
-                "reference": "557986501905b81cad06d9178b807ecb1c9c1fe9",
+                "url": "https://api.github.com/repos/bristol-su/support/zipball/274f52fa0120cc39712b71227b4b79075fef6658",
+                "reference": "274f52fa0120cc39712b71227b4b79075fef6658",
                 "shasum": ""
             },
             "require": {
@@ -286,9 +286,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bristol-su/support/issues",
-                "source": "https://github.com/bristol-su/support/tree/portal-v4"
+                "source": "https://github.com/bristol-su/support/tree/portal-226"
             },
-            "time": "2020-12-31T01:19:38+00:00"
+            "time": "2021-01-02T17:11:49+00:00"
         },
         {
             "name": "defuse/php-encryption",

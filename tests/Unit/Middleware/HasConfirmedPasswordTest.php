@@ -4,7 +4,7 @@ namespace BristolSU\Auth\Tests\Unit\Middleware;
 
 use BristolSU\Auth\Exceptions\PasswordUnconfirmed;
 use BristolSU\Auth\Middleware\HasConfirmedPassword;
-use BristolSU\Auth\Settings\Login\PasswordConfirmationTimeout;
+use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Tests\TestCase;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

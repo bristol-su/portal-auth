@@ -1,8 +1,8 @@
 <?php
 
-namespace BristolSU\Auth\Tests\Unit\Settings\Login;
+namespace BristolSU\Auth\Tests\Unit\Settings\Security;
 
-use BristolSU\Auth\Settings\Login\PasswordConfirmationTimeout;
+use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Tests\TestCase;
 use FormSchema\Schema\Field;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +19,7 @@ class PasswordConfirmationTimeoutTest extends TestCase
     /** @test */
     public function key_returns_the_setting_key(){
         $passwordConfirmationTimeout = new PasswordConfirmationTimeout();
-        $this->assertEquals('authentication.login.password-confirmation-timeout', $passwordConfirmationTimeout->key());
+        $this->assertEquals('authentication.security.password-confirmation-timeout', $passwordConfirmationTimeout->key());
     }
 
     /** @test */

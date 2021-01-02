@@ -22,7 +22,7 @@
         "laravel/framework": "^8.0",
         "laravel/passport": "^10.0",
         "bristol-su/control": "dev-laravel-8",
-        "bristol-su/support": "dev-portal-v4",
+        "bristol-su/support": "dev-portal-226",
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
         "ext-json": "*"

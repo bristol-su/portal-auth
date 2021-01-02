@@ -3,7 +3,7 @@
 namespace BristolSU\Auth\Middleware;
 
 use BristolSU\Auth\Exceptions\PasswordUnconfirmed;
-use BristolSU\Auth\Settings\Login\PasswordConfirmationTimeout;
+use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use Closure;
 use Illuminate\Http\Request;
 

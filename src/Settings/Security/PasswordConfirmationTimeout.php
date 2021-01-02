@@ -1,6 +1,6 @@
 <?php
 
-namespace BristolSU\Auth\Settings\Login;
+namespace BristolSU\Auth\Settings\Security;
 
 use BristolSU\Support\Settings\Definition\GlobalSetting;
 use FormSchema\Schema\Field;
@@ -10,7 +10,7 @@ class PasswordConfirmationTimeout extends GlobalSetting
 
     public function key(): string
     {
-        return 'authentication.login.password-confirmation-timeout';
+        return 'authentication.security.password-confirmation-timeout';
     }
 
     public function fieldOptions(): Field
