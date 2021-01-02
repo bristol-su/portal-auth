@@ -21,6 +21,9 @@ use BristolSU\Auth\Settings\Credentials\CredentialsGroup;
 use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Settings\Access\AccessGroup;
+use BristolSU\Auth\Settings\Messaging\AlreadyRegisteredMessage;
+use BristolSU\Auth\Settings\Messaging\ControlUserRegistrationNotAllowedMessage;
+use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Settings\Security\SecurityGroup;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
@@ -118,6 +121,13 @@ class AuthServiceProvider extends ServiceProvider
             ->group(new SecurityGroup())
             ->registerSetting(new PasswordConfirmationTimeout())
             ->registerSetting(new ShouldVerifyEmail());
+
+        $this->registerSettings()
+            ->category(new AuthCategory())
+            ->group(new SecurityGroup())
+            ->registerSetting(new ControlUserRegistrationNotAllowedMessage())
+            ->registerSetting(new DataUserRegistrationNotAllowedMessage())
+            ->registerSetting(new AlreadyRegisteredMessage());
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'portal-auth');

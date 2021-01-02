@@ -78,7 +78,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
                         PHPUnit::assertContains(
                             is_bool($value) ? (string) $value : $value, $errorMessages,
                             sprintf(
-                                'Failed asserting [%s] is in %s ',
+                                'Failed asserting [%s] is in (%s) ',
                                 $value, implode(
                                     ', ',
                                     $errorMessages

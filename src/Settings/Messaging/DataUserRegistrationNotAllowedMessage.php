@@ -1,22 +1,22 @@
 <?php
 
 
-namespace BristolSU\Auth\Settings\Access;
+namespace BristolSU\Auth\Settings\Messaging;
 
 
 use BristolSU\Support\Settings\Definition\GlobalSetting;
 use FormSchema\Schema\Field;
 
-class ControlUserRegistrationNotAllowedMessage extends GlobalSetting
+class DataUserRegistrationNotAllowedMessage extends GlobalSetting
 {
 
     public function fieldOptions(): Field
     {
         return \FormSchema\Generator\Field::input($this->inputName())
             ->inputType('text')
-            ->label('Control User Registration - Error Message')
+            ->label('Data User Registration - Error Message')
             ->default($this->defaultValue())
-            ->hint('The message to show to a user when they haven\'t been able to register because control registration is disabled')
+            ->hint('The message to show to a user when they haven\'t been able to register because data registration is disabled')
             ->getSchema();
     }
 
@@ -35,6 +35,6 @@ class ControlUserRegistrationNotAllowedMessage extends GlobalSetting
 
     public function key(): string
     {
-        return 'authentication.access.controluser-registration-not-allowed-message';
+        return 'authentication.messaging.datauser-registration-not-allowed-message';
     }
 }
