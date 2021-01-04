@@ -3,6 +3,7 @@
 namespace BristolSU\Auth\Http\Controllers\Auth;
 
 use BristolSU\Auth\Authentication\Contracts\AuthenticationUserResolver;
+use BristolSU\Auth\Events\UserVerificationRequestGenerated;
 use BristolSU\Auth\Http\Controllers\Controller;
 use BristolSU\Auth\Http\Requests\Auth\RegisterRequest;
 use BristolSU\Auth\Settings\Access\ControlUserRegistrationEnabled;
@@ -65,6 +66,11 @@ class RegisterController extends Controller
         $user = $this->registerUser($request);
 
         $userResolver->setUser($user);
+
+        if(!$user->hasVerifiedEmail()) {
+            event(new UserVerificationRequestGenerated($user));
+
+        }
 
         return redirect()->route(DefaultHome::getValue($user->controlId()));
     }

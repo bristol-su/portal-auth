@@ -2,6 +2,7 @@
 
 namespace BristolSU\Auth\Tests\Integration\Http\Controllers\Auth;
 
+use BristolSU\Auth\Events\UserVerificationRequestGenerated;
 use BristolSU\Auth\Settings\Access\ControlUserRegistrationEnabled;
 use BristolSU\Auth\Settings\Access\DataUserRegistrationEnabled;
 use BristolSU\Auth\Settings\Access\DefaultHome;
@@ -13,6 +14,7 @@ use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\ControlDB\Models\DataUser;
 use BristolSU\ControlDB\Models\User;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 
 class RegisterControllerTest extends TestCase
@@ -279,7 +281,26 @@ class RegisterControllerTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('http://localhost/portal-new');
         $this->assertAuthenticated();
+    }
 
+    /** @test */
+    public function POSTregister_fires_an_event_when_a_new_user_is_created(){
+        Event::fake(UserVerificationRequestGenerated::class);
+
+        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        DefaultHome::setDefault('abc123-test');
+
+        $response = $this->from('login-page-1')->post('/register', [
+            'identifier' => 'example@portal.com',
+            'password' => 'secret123',
+            'password_confirmation' => 'secret123'
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('http://localhost/portal-new');
+        $this->assertAuthenticated();
+
+        Event::assertDispatched(UserVerificationRequestGenerated::class);
     }
 
 }

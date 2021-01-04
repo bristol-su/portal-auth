@@ -9,10 +9,20 @@ use Illuminate\Contracts\Notifications\Dispatcher;
 class SendVerificationEmail
 {
 
+    /**
+     * @var Dispatcher
+     */
+    private Dispatcher $dispatcher;
+
+    public function __construct(Dispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
     public function handle(UserVerificationRequestGenerated $event)
     {
         if($event->authenticationUser->controlUser()->data()->email() !== null) {
-            app(Dispatcher::class)->send($event->authenticationUser, new VerifyEmail());
+            $this->dispatcher->send($event->authenticationUser, new VerifyEmail());
         }
     }
 
