@@ -31,7 +31,7 @@ class RegisterControllerTest extends TestCase
         $user = AuthenticationUser::factory()->create();
         $this->be($user);
 
-        Route::name('portal')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('portal')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setValue('portal', $user->id);
 
         $response = $this->get('/register');
@@ -43,7 +43,7 @@ class RegisterControllerTest extends TestCase
         $user = AuthenticationUser::factory()->create();
         $this->be($user);
 
-        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setValue('abc123-test', $user->id);
 
         $response = $this->get('/register');
@@ -60,7 +60,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_validation_if_identifier_not_given(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -76,7 +76,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_validation_if_password_not_given(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -92,7 +92,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_validation_if_password_confirmation_not_given(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -108,7 +108,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_validation_if_password_confirmation_does_not_match_password(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -127,7 +127,7 @@ class RegisterControllerTest extends TestCase
     public function POSTregister_redirects_to_the_get_request_if_registration_disabled(){
         RegistrationEnabled::setValue(false);
 
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -141,7 +141,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_with_a_custom_error_message_if_data_user_does_not_exist_but_must_do(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         DataUserRegistrationEnabled::setValue(false);
@@ -161,7 +161,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_with_a_custom_error_message_if_control_user_does_not_exist_but_must_do(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $user = factory(DataUser::class)->create(['email' => 'example@portal.com']);
@@ -183,7 +183,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_fails_with_a_custom_error_message_if_authentication_user_already_exists(){
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
@@ -206,7 +206,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_creates_a_data_user_if_needed(){
-        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -225,7 +225,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_creates_a_control_user_if_needed(){
-        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -246,7 +246,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_creates_an_authentication_user_if_needed(){
-        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [
@@ -268,7 +268,7 @@ class RegisterControllerTest extends TestCase
 
     /** @test */
     public function POSTregister_logs_in_the_new_user(){
-        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $this->assertGuest();
@@ -287,7 +287,7 @@ class RegisterControllerTest extends TestCase
     public function POSTregister_fires_an_event_when_a_new_user_is_created(){
         Event::fake(UserVerificationRequestGenerated::class);
 
-        Route::name('abc123-test')->get('portal-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
         $response = $this->from('login-page-1')->post('/register', [

@@ -42,7 +42,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'prefix' => '',
         ]);
         $app['config']->set('app.key', 'base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=');
-
+        $app['config']->set('mail.default', 'array');
         $app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\Session\Middleware\StartSession');
         $app->singleton(
             \Illuminate\Contracts\Debug\ExceptionHandler::class,

@@ -45,4 +45,20 @@ class DefaultHome extends UserSetting
             ]
         ];
     }
+
+    /**
+     * Get the value as a route name
+     *
+     * @param int|null $userId
+     * @return string
+     */
+    public static function getValueAsRouteName(int $userId = null): string
+    {
+        return static::getValue($userId);
+    }
+
+    public static function getValueAsPath(int $userId = null, bool $absolute = false): string
+    {
+        return url()->route(static::getValueAsRouteName($userId), [], $absolute);
+    }
 }

@@ -8,42 +8,37 @@ use BristolSU\Auth\Authentication\Contracts\AuthenticationUserResolver;
 use BristolSU\Auth\Events\UserVerificationRequestGenerated;
 use BristolSU\Auth\Http\Controllers\Controller;
 use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Auth\Settings\Security\UnauthenticatedVerificationAllowed;
+use BristolSU\Auth\User\Contracts\AuthenticationUserRepository;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 
 class VerifyEmailController extends Controller
 {
 
     public function showVerifyPage(AuthenticationUserResolver $resolver)
     {
-        return $resolver->getUser()->hasVerifiedEmail()
-            ? redirect()->intended(DefaultHome::getValue($resolver->getUser()->controlId()))
-            : view('portal-auth::pages.verify_email');
+        return view('portal-auth::pages.verify_email');
     }
 
-    public function verify()
+    public function verify(Request $request, AuthenticationUserResolver $resolver, AuthenticationUserRepository $userRepository)
     {
-//        $id = $request->get('id');
-//        if($id !== $request->user()->id) {
-//            throw new AuthorizationException;
-//        }
-//
-//        if ($request->user()->hasVerifiedEmail()) {
-//            return redirect($this->redirectPath());
-//        }
-//
-//        if ($request->user()->markEmailAsVerified()) {
-//            event(new Verified($request->user()));
-//        }
-//
-//        return redirect($this->redirectPath())->with('verified', true);
+        if($request->get('id') !== $resolver->getUser()->id) {
+            throw new AuthorizationException();
+        }
+
+        $user = $resolver->getUser();
+
+        $user->markEmailAsVerified();
+
+        return redirect()->intended(DefaultHome::getValueAsPath($user->controlId()));
     }
 
     public function resend(AuthenticationUserResolver $resolver)
     {
-        if($resolver->getUser()->hasVerifiedEmail()) {
-            return redirect()->intended(DefaultHome::getValue($resolver->getUser()->controlId()));
-        }
-
         event(new UserVerificationRequestGenerated($resolver->getUser()));
+
+        return redirect()->route('verify.warning');
     }
 
 }

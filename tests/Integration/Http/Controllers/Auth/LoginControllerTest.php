@@ -26,7 +26,7 @@ class LoginControllerTest extends TestCase
         $user = AuthenticationUser::factory()->create();
         $this->be($user);
 
-        Route::name('portal')->get('portal', fn($request) => response('Test', 200));
+        Route::name('portal')->get('portal', fn() => response('Test', 200));
         DefaultHome::setValue('portal', $user->id);
 
         $response = $this->get('/login');
@@ -38,7 +38,7 @@ class LoginControllerTest extends TestCase
         $user = AuthenticationUser::factory()->create();
         $this->be($user);
 
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setValue('abc123-test', $user->id);
 
         $response = $this->get('/login');
@@ -51,7 +51,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 
@@ -71,7 +71,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 
@@ -91,7 +91,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 
@@ -113,7 +113,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 
@@ -131,7 +131,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal1', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
         DefaultHome::setValue('abc123-test', $controlUser->id());
         IdentifierAttribute::setValue('email');
 
@@ -149,8 +149,8 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal1', fn($request) => response('Test', 200));
-        Route::name('abc123-test-2')->get('portal1-new', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
+        Route::name('abc123-test-2')->get('portal1-new', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 
@@ -168,7 +168,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal1', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 
@@ -204,7 +204,7 @@ class LoginControllerTest extends TestCase
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
-        Route::name('abc123-test')->get('portal1', fn($request) => response('Test', 200));
+        Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
         IdentifierAttribute::setValue('email');
 

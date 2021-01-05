@@ -114,9 +114,7 @@ session()->flash('test', ($this->limiter()->attempts($this->throttleKey($request
 
         // The setting value belongs to the control user, NOT the authentication user
 
-        return redirect()->intended(
-            url()->route(DefaultHome::getValue($request->user()->id()))
-        );
+        return redirect()->intended(DefaultHome::getValueAsPath($request->user()->id()));
     }
 
     /**

@@ -72,7 +72,7 @@ class RegisterController extends Controller
 
         }
 
-        return redirect()->route(DefaultHome::getValue($user->controlId()));
+        return redirect()->route(DefaultHome::getValueAsRouteName($user->controlId()));
     }
 
     /**

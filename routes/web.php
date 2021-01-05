@@ -18,8 +18,8 @@ Route::middleware('portal-guest')->group(function() {
 
 Route::middleware(['portal-auth', 'portal-not-verified'])->group(function() {
     Route::get('verify', [VerifyEmailController::class, 'showVerifyPage'])->name('verify.warning');
-    Route::get('verify/authorize', [VerifyEmailController::class, 'verify'])->name('verify');
-    Route::middleware(['portal-throttle:3'])->post('verify/resend', [VerifyEmailController::class, 'resend'])->name('verify.resend');
+    Route::middleware('link')->get('verify/authorize', [VerifyEmailController::class, 'verify'])->name('verify');
+    Route::middleware('portal-throttle:3')->post('verify/resend', [VerifyEmailController::class, 'resend'])->name('verify.resend');
 });
 
 Route::middleware(['portal-auth', 'portal-verified'])->group(function() {

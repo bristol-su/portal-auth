@@ -8,6 +8,8 @@ use BristolSU\Auth\Authentication\ControlResolver\Api as ApiControlResolver;
 use BristolSU\Auth\Authentication\ControlResolver\Web as WebControlResolver;
 use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
+use BristolSU\Auth\Events\UserVerificationRequestGenerated;
+use BristolSU\Auth\Listeners\SendVerificationEmail;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
 use BristolSU\Auth\Middleware\HasConfirmedPassword;
 use BristolSU\Auth\Middleware\HasNotVerifiedEmail;
@@ -38,6 +40,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -137,6 +140,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'portal-auth');
         $this->loadRoutes();
         $this->app->call([$this, 'overrideAuthConfig']);
+
+        Event::listen(UserVerificationRequestGenerated::class, SendVerificationEmail::class);
 
     }
 

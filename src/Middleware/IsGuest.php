@@ -30,7 +30,7 @@ class IsGuest
     {
         $user = $this->authentication->getUser();
         if($user !== null) {
-            return redirect()->route(DefaultHome::getValue($this->authentication->getUser()->id()));
+            return redirect()->route(DefaultHome::getValueAsRouteName($user->id()));
         }
         return $next($request);
     }

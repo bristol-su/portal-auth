@@ -17,7 +17,7 @@ class IsGuestTest extends TestCase
     public function it_redirects_to_the_default_home_if_a_user_is_logged_in(){
         $request = Request::create('/test');
 
-        Route::name('test-name')->get('test', fn($request) => response('Test', 200));
+        Route::name('test-name')->get('test', fn() => response('Test', 200));
 
         $user = $this->newUser();
         $authentication = $this->prophesize(Authentication::class);

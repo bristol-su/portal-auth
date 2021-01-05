@@ -34,7 +34,7 @@ class HasNotVerifiedEmail
     public function handle($request, Closure $next)
     {
         if ($this->emailVerified()) {
-            return redirect()->intended(DefaultHome::getValue($this->userResolver->getUser()->controlId()));
+            return redirect()->intended(DefaultHome::getValueAsPath($this->userResolver->getUser()->controlId()));
         }
 
         return $next($request);

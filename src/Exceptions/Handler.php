@@ -5,6 +5,7 @@ namespace BristolSU\Auth\Exceptions;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Linkeys\UrlSigner\Exceptions\LinkNotFoundException;
 use Throwable;
 
 class Handler extends \Illuminate\Foundation\Exceptions\Handler
@@ -41,13 +42,19 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
             if ($exception instanceof EmailNotVerified) {
                 return redirect()->route('verify.warning');
             }
+            if($exception instanceof LinkNotFoundException) {
+                $request->session()->flash('messages', 'This link has expired.');
+                return redirect()->route('verify.warning');
+            }
         } else {
             if ($exception instanceof EmailNotVerified) {
                 return response()->json('You must verify your email address.', 403);
             }
-
             if ($exception instanceof PasswordUnconfirmed) {
                 return response()->json('Password confirmation required.', 423);
+            }
+            if ($exception instanceof LinkNotFoundException) {
+                return response()->json('This link has expired.', 403);
             }
         }
         return parent::render($request, $exception);
