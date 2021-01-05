@@ -10,8 +10,6 @@ use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Prophecy\Argument;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class HasVerifiedEmailTest extends TestCase
 {

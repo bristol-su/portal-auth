@@ -3,6 +3,7 @@
 
 use BristolSU\Auth\Http\Controllers\Auth\LoginController;
 use BristolSU\Auth\Http\Controllers\Auth\RegisterController;
+use BristolSU\Auth\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('portal-guest')->group(function() {
@@ -11,7 +12,21 @@ Route::middleware('portal-guest')->group(function() {
 
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [RegisterController::class, 'register']);
+
+
 });
+
+Route::middleware(['portal-auth', 'portal-not-verified'])->group(function() {
+    Route::get('verify', [VerifyEmailController::class, 'showVerifyPage'])->name('verify.warning');
+    Route::get('verify/authorize', [VerifyEmailController::class, 'verify'])->name('verify');
+    Route::middleware(['portal-throttle:3'])->post('verify/resend', [VerifyEmailController::class, 'resend'])->name('verify.resend');
+});
+
+Route::middleware(['portal-auth', 'portal-verified'])->group(function() {
+    // TODO
+});
+
+
 
 //Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 //

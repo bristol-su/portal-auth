@@ -34,7 +34,7 @@ class VerifyEmail extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $user
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail(AuthenticationUser $user)
     {
@@ -56,7 +56,7 @@ class VerifyEmail extends Notification
     protected function verificationUrl(AuthenticationUser $user)
     {
         return \Linkeys\UrlSigner\Facade\UrlSigner::sign(
-            app(UrlGenerator::class)->route('verification.verify'),
+            app(UrlGenerator::class)->route('verify'),
             ['id' => $user->id],
             '+' . Config::get('auth.verification.expire', 60) . ' minutes',
             1

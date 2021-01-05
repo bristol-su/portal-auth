@@ -3,6 +3,7 @@
 namespace BristolSU\Auth\Tests;
 
 use BristolSU\Auth\AuthServiceProvider;
+use BristolSU\Auth\Exceptions\Handler;
 use BristolSU\ControlDB\ControlDBServiceProvider;
 use BristolSU\Support\SupportServiceProvider;
 use BristolSU\Support\Testing\AssertsEloquentModels;
@@ -43,7 +44,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('app.key', 'base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=');
 
         $app->make('Illuminate\Contracts\Http\Kernel')->pushMiddleware('Illuminate\Session\Middleware\StartSession');
-
+        $app->singleton(
+            \Illuminate\Contracts\Debug\ExceptionHandler::class,
+            Handler::class
+        );
         $this->addTestResponseMacros();
     }
 

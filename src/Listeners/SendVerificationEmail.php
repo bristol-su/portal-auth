@@ -21,7 +21,7 @@ class SendVerificationEmail
 
     public function handle(UserVerificationRequestGenerated $event)
     {
-        if($event->authenticationUser->controlUser()->data()->email() !== null) {
+        if($event->authenticationUser->controlUser()->data()->email() !== null && !$event->authenticationUser->hasVerifiedEmail()) {
             $this->dispatcher->send($event->authenticationUser, new VerifyEmail());
         }
     }

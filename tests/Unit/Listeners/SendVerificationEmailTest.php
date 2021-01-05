@@ -48,4 +48,9 @@ class SendVerificationEmailTest extends TestCase
         $listener->handle($event);
     }
 
+    /** @test */
+    public function handle_doesnt_dispatch_the_mail_if_the_user_has_verified_their_email_address(){
+
+    }
+
 }

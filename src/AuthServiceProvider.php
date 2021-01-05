@@ -10,9 +10,11 @@ use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
 use BristolSU\Auth\Middleware\HasConfirmedPassword;
+use BristolSU\Auth\Middleware\HasNotVerifiedEmail;
 use BristolSU\Auth\Middleware\HasVerifiedEmail;
 use BristolSU\Auth\Middleware\IsAuthenticated;
 use BristolSU\Auth\Middleware\IsGuest;
+use BristolSU\Auth\Middleware\ThrottleRequests;
 use BristolSU\Auth\Settings\Access\ControlUserRegistrationEnabled;
 use BristolSU\Auth\Settings\Access\DataUserRegistrationEnabled;
 use BristolSU\Auth\Settings\Access\RegistrationEnabled;
@@ -98,10 +100,12 @@ class AuthServiceProvider extends ServiceProvider
     {
 
         $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-auth', HasVerifiedEmail::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-verified', HasVerifiedEmail::class);
         $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
         $this->app['router']->pushMiddlewareToGroup('portal-guest', IsGuest::class);
         $this->app['router']->pushMiddlewareToGroup('portal-confirmed', HasConfirmedPassword::class);
+        $this->app['router']->aliasMiddleware('portal-throttle', ThrottleRequests::class);
+        $this->app['router']->aliasMiddleware('portal-not-verified', HasNotVerifiedEmail::class);
 
         $this->registerSettings()
             ->category(new AuthCategory())
