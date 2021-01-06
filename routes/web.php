@@ -3,6 +3,7 @@
 
 use BristolSU\Auth\Http\Controllers\Auth\LoginController;
 use BristolSU\Auth\Http\Controllers\Auth\ConfirmPasswordController;
+use BristolSU\Auth\Http\Controllers\Auth\LogoutController;
 use BristolSU\Auth\Http\Controllers\Auth\RegisterController;
 use BristolSU\Auth\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,9 @@ Route::middleware('portal-guest')->group(function() {
 
 
 });
+
+Route::middleware('portal-auth')->name('logout')
+    ->post('logout', [LogoutController::class, 'logout']);
 
 Route::middleware(['portal-auth', 'portal-not-verified'])->group(function() {
     Route::get('verify', [VerifyEmailController::class, 'showVerifyPage'])->name('verify.notice');
