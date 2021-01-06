@@ -38,7 +38,7 @@ class VerifyEmailController extends Controller
     {
         event(new UserVerificationRequestGenerated($resolver->getUser()));
 
-        return redirect()->route('verify.warning');
+        return redirect()->route('verify.notice');
     }
 
 }

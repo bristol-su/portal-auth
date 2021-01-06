@@ -2,6 +2,7 @@
 
 
 use BristolSU\Auth\Http\Controllers\Auth\LoginController;
+use BristolSU\Auth\Http\Controllers\Auth\ConfirmPasswordController;
 use BristolSU\Auth\Http\Controllers\Auth\RegisterController;
 use BristolSU\Auth\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -17,13 +18,14 @@ Route::middleware('portal-guest')->group(function() {
 });
 
 Route::middleware(['portal-auth', 'portal-not-verified'])->group(function() {
-    Route::get('verify', [VerifyEmailController::class, 'showVerifyPage'])->name('verify.warning');
+    Route::get('verify', [VerifyEmailController::class, 'showVerifyPage'])->name('verify.notice');
     Route::middleware('link')->get('verify/authorize', [VerifyEmailController::class, 'verify'])->name('verify');
     Route::middleware('portal-throttle:3')->post('verify/resend', [VerifyEmailController::class, 'resend'])->name('verify.resend');
 });
 
 Route::middleware(['portal-auth', 'portal-verified'])->group(function() {
-    // TODO
+    Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmationPage'])->name('password.confirmation.notice');
+    Route::middleware('portal-throttle:5,1')->post('password/confirm', [ConfirmPasswordController::class, 'confirm'])->name('password.confirmation');
 });
 
 

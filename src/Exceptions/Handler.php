@@ -40,11 +40,14 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
     {
         if (!$request->expectsJson()) {
             if ($exception instanceof EmailNotVerified) {
-                return redirect()->route('verify.warning');
+                return redirect()->route('verify.notice');
             }
             if($exception instanceof LinkNotFoundException) {
                 $request->session()->flash('messages', 'This link has expired.');
-                return redirect()->route('verify.warning');
+                return redirect()->route('verify.notice');
+            }
+            if ($exception instanceof PasswordUnconfirmed) {
+                return redirect()->route('password.confirmation.notice');
             }
         } else {
             if ($exception instanceof EmailNotVerified) {

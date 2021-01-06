@@ -43,6 +43,19 @@ class HandlerTest extends TestCase
     }
 
     /** @test */
+    public function it_handles_a_web_request_throwing_an_PasswordUnconfirmed_exception(){
+        $handler = new Handler($this->app);
+
+        $request = $this->prophesize(Request::class);
+        $request->expectsJson()->willReturn(false);
+
+        $exception = new PasswordUnconfirmed();
+        $response = $handler->render($request->reveal(), $exception);
+
+        $this->assertTrue($response->isRedirect('http://localhost/password/confirm'));
+    }
+
+    /** @test */
     public function it_handles_a_json_request_throwing_a_PasswordUnconfirmed_exception(){
         $handler = new Handler($this->app);
 

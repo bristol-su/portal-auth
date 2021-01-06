@@ -11,6 +11,8 @@ use BristolSU\ControlDB\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Testing\Assert as PHPUnit;
 
 class LoginControllerTest extends TestCase
 {
@@ -193,8 +195,15 @@ class LoginControllerTest extends TestCase
         ]);
 
         $response->assertRedirect('login-page-1');
-        $response->assertValidationErrorsEqual([
-            'identifier' => 'Too many login attempts. Please try again in 60 seconds.'
+        $response->assertSessionHas('errors');
+        $errors = Session::get('errors')->getBag('default');
+
+        $this->assertArrayHasKey('identifier', $errors->toArray());
+        $this->assertCount(1, $errors->get('identifier'));
+        $this->assertContains($errors->get('identifier')[0], [
+            'Too many login attempts. Please try again in 60 seconds.',
+            'Too many login attempts. Please try again in 59 seconds.',
+            'Too many login attempts. Please try again in 58 seconds.'
         ]);
     }
 
@@ -228,8 +237,15 @@ class LoginControllerTest extends TestCase
             'REMOTE_ADDR' => '192.0.0.44'
         ]);
         $response->assertRedirect('login-page-1');
-        $response->assertValidationErrorsEqual([
-            'identifier' => 'Too many login attempts. Please try again in 60 seconds.'
+        $response->assertSessionHas('errors');
+        $errors = Session::get('errors')->getBag('default');
+
+        $this->assertArrayHasKey('identifier', $errors->toArray());
+        $this->assertCount(1, $errors->get('identifier'));
+        $this->assertContains($errors->get('identifier')[0], [
+            'Too many login attempts. Please try again in 60 seconds.',
+            'Too many login attempts. Please try again in 59 seconds.',
+            'Too many login attempts. Please try again in 58 seconds.'
         ]);
 
         Carbon::setTestNow(Carbon::now()->addSeconds(30));
@@ -241,8 +257,15 @@ class LoginControllerTest extends TestCase
             'REMOTE_ADDR' => '192.0.0.44'
         ]);
         $response->assertRedirect('login-page-1');
-        $response->assertValidationErrorsEqual([
-            'identifier' => 'Too many login attempts. Please try again in 30 seconds.'
+        $response->assertSessionHas('errors');
+        $errors = Session::get('errors')->getBag('default');
+
+        $this->assertArrayHasKey('identifier', $errors->toArray());
+        $this->assertCount(1, $errors->get('identifier'));
+        $this->assertContains($errors->get('identifier')[0], [
+            'Too many login attempts. Please try again in 30 seconds.',
+            'Too many login attempts. Please try again in 29 seconds.',
+            'Too many login attempts. Please try again in 28 seconds.'
         ]);
 
         Carbon::setTestNow(Carbon::now()->addMinute()->addSecond());
