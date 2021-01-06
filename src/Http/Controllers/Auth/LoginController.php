@@ -60,7 +60,6 @@ class LoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         }
-
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
@@ -69,7 +68,8 @@ class LoginController extends Controller
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
-session()->flash('test', ($this->limiter()->attempts($this->throttleKey($request))));
+
+        session()->flash('test', ($this->limiter()->attempts($this->throttleKey($request))));
 
         throw ValidationException::withMessages([
             'identifier' => [trans('auth.failed')],
@@ -108,12 +108,10 @@ session()->flash('test', ($this->limiter()->attempts($this->throttleKey($request
      */
     protected function sendLoginResponse(Request $request)
     {
-        $request->session()->regenerate();
+        session()->regenerate();
 
         $this->clearLoginAttempts($request);
-
-        // The setting value belongs to the control user, NOT the authentication user
-
+dd(redirect()->intended(DefaultHome::getValueAsPath($request->user()->id())));
         return redirect()->intended(DefaultHome::getValueAsPath($request->user()->id()));
     }
 

@@ -103,8 +103,8 @@ class AuthServiceProvider extends ServiceProvider
     {
 
         $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-verified', HasVerifiedEmail::class);
         $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-verified', HasVerifiedEmail::class);
         $this->app['router']->pushMiddlewareToGroup('portal-guest', IsGuest::class);
         $this->app['router']->pushMiddlewareToGroup('portal-confirmed', HasConfirmedPassword::class);
         $this->app['router']->aliasMiddleware('portal-throttle', ThrottleRequests::class);
@@ -143,6 +143,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Event::listen(UserVerificationRequestGenerated::class, SendVerificationEmail::class);
 
+        // TODO REMOVE THIS, was just used for testing
+        DefaultHome::setDefault('test-1');
     }
 
     /**

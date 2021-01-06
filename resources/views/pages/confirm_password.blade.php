@@ -4,5 +4,10 @@
 
 @section('content')
 
-    Password Confirmation
+    <form action="{{route('password.confirmation')}}" method="POST">
+        @csrf
+        <input type="Password" name="password" />
+        <button type="submit">Confirm</button>
+    </form>
+
 @endsection
