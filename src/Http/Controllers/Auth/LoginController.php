@@ -5,6 +5,7 @@ namespace BristolSU\Auth\Http\Controllers\Auth;
 use BristolSU\Auth\Http\Controllers\Controller;
 use BristolSU\Auth\Http\Requests\Auth\LoginRequest;
 use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Support\Authentication\Contracts\Authentication;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
@@ -109,7 +110,7 @@ class LoginController extends Controller
         session()->regenerate();
         $this->clearLoginAttempts($request);
 
-        return redirect()->intended(DefaultHome::getValueAsPath($request->user()->id()));
+        return redirect()->intended(DefaultHome::getValueAsPath(app(Authentication::class)->getUser()->id()));
     }
 
     /**

@@ -60,6 +60,7 @@ class LoginControllerTest extends TestCase
         $response = $this->from('login-page-1')->post('/login', [
             'password' => 'secret123'
         ]);
+        dd(Session::all());
         $response->assertStatus(302);
         $response->assertRedirect('http://localhost/login-page-1');
         $response->assertValidationErrorsEqual([

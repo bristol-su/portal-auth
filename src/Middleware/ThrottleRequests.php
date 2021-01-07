@@ -4,13 +4,15 @@
 namespace BristolSU\Auth\Middleware;
 
 
+use BristolSU\Support\Authentication\Contracts\Authentication;
+
 class ThrottleRequests extends \Illuminate\Routing\Middleware\ThrottleRequests
 {
 
     protected function resolveRequestSignature($request)
     {
-        if ($user = $request->user()) {
-            return sha1($user->id());
+        if (app(Authentication::class)->hasUser()) {
+            return sha1(app(Authentication::class)->getUser()->id());
         }
         return parent::resolveRequestSignature($request);
     }

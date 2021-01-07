@@ -5,6 +5,7 @@ namespace BristolSU\Auth\Http\Controllers\Auth;
 
 
 use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -26,10 +27,11 @@ class ConfirmPasswordController
             ]
         );
 
+
         $this->resetPasswordConfirmationTimeout($request);
 
         return redirect()->intended(
-            DefaultHome::getValueAsPath()
+            DefaultHome::getValueAsPath($request->user()->controlId())
         );
     }
 
@@ -41,7 +43,7 @@ class ConfirmPasswordController
      */
     protected function resetPasswordConfirmationTimeout(Request $request)
     {
-        $request->session()->put('auth.password_confirmed_at', Carbon::now()->unix());
+        $request->session()->put('portal-auth.password_confirmed_at', Carbon::now()->unix());
     }
 
 

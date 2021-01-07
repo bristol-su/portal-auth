@@ -9,6 +9,7 @@ use BristolSU\Auth\Authentication\ControlResolver\Web as WebControlResolver;
 use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
 use BristolSU\Auth\Events\UserVerificationRequestGenerated;
+use BristolSU\Auth\Exceptions\Handler;
 use BristolSU\Auth\Listeners\SendVerificationEmail;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
 use BristolSU\Auth\Middleware\HasConfirmedPassword;
@@ -102,7 +103,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
         $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
         $this->app['router']->pushMiddlewareToGroup('portal-verified', HasVerifiedEmail::class);
@@ -139,7 +139,28 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'portal-auth');
+        $this->publishes([
+            __DIR__.'/../config/portal-auth.php' => config_path('portal-auth.php'),
+        ]);
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/portal-auth.php', 'portal-auth'
+        );
         $this->loadRoutes();
+
+        $this->app->rebinding('request', function ($app, $request) {
+            $request->setUserResolver(function () use ($app) {
+                return $app->make(AuthenticationUserResolver::class)->getUser();
+            });
+        });
+
+        $this->app->extend(\Illuminate\Contracts\Debug\ExceptionHandler::class, function($baseHandler) {
+            return new Handler($baseHandler);
+        });
+
+        $this->app['auth']->resolveUsersUsing(function() {
+            return app()->make(AuthenticationUserResolver::class)->getUser();
+        });
+
         $this->app->call([$this, 'overrideAuthConfig']);
 
         Event::listen(UserVerificationRequestGenerated::class, SendVerificationEmail::class);
@@ -151,8 +172,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function loadRoutes()
     {
-        Route::group([], __DIR__ . '/../routes/web.php');
-        Route::group([], __DIR__ . '/../routes/api.php');
+        Route::middleware(config('portal-auth.middleware.web'))->group(__DIR__ . '/../routes/web.php');
+        Route::middleware(config('portal-auth.middleware.api'))->group(__DIR__ . '/../routes/api.php');
     }
 
     public function overrideAuthConfig(Repository $config)

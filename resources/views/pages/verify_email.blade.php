@@ -6,11 +6,11 @@
 
     Your email must be verified. Click below to resend the email.
 
-    <form action="{{route('verify.resend')}}">
+    <form action="{{route('verify.resend')}}" method="POST">
         @csrf
-        <portal-button type="submit">
+        <button type="submit">
             Resend
-        </portal-button>
+        </button>
     </form>
 
 @endsection
