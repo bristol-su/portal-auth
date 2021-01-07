@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -52,9 +53,6 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the identifier and
-        // the IP address of the client making these requests into this application.
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
@@ -109,9 +107,8 @@ class LoginController extends Controller
     protected function sendLoginResponse(Request $request)
     {
         session()->regenerate();
-
         $this->clearLoginAttempts($request);
-dd(redirect()->intended(DefaultHome::getValueAsPath($request->user()->id())));
+
         return redirect()->intended(DefaultHome::getValueAsPath($request->user()->id()));
     }
 

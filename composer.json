@@ -20,7 +20,6 @@
     "require": {
         "php": "^7.4",
         "laravel/framework": "^8.0",
-        "laravel/passport": "^10.0",
         "bristol-su/control": "dev-laravel-8",
         "bristol-su/support": "dev-portal-226",
         "doctrine/dbal": "^2.10",

@@ -40,6 +40,7 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
     {
         if (!$request->expectsJson()) {
             if ($exception instanceof EmailNotVerified) {
+                redirect()->setIntendedUrl($request->path());
                 return redirect()->route('verify.notice');
             }
             if($exception instanceof LinkNotFoundException) {
@@ -47,6 +48,7 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
                 return redirect()->route('verify.notice');
             }
             if ($exception instanceof PasswordUnconfirmed) {
+                redirect()->setIntendedUrl($request->path());
                 return redirect()->route('password.confirmation.notice');
             }
         } else {

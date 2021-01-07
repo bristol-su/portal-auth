@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Database user service provider
@@ -143,8 +144,6 @@ class AuthServiceProvider extends ServiceProvider
 
         Event::listen(UserVerificationRequestGenerated::class, SendVerificationEmail::class);
 
-        // TODO REMOVE THIS, was just used for testing
-        DefaultHome::setDefault('test-1');
     }
 
     /**
