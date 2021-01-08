@@ -68,8 +68,6 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-        session()->flash('test', ($this->limiter()->attempts($this->throttleKey($request))));
-
         throw ValidationException::withMessages([
             'identifier' => [trans('auth.failed')],
         ]);
