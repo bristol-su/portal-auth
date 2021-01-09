@@ -10,14 +10,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\ValidationException;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * Represents a user in the database
  */
 class AuthenticationUser extends Authenticatable implements MustVerifyEmailContract
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable;
 
     protected $table = 'authentication_users';
 
