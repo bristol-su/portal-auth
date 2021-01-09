@@ -136,6 +136,13 @@ class AuthServiceProvider extends ServiceProvider
             ->registerSetting(new DataUserRegistrationNotAllowedMessage())
             ->registerSetting(new AlreadyRegisteredMessage());
 
+        $this->publishes([
+            __DIR__.'/../config/portal-auth.php' => config_path('portal-auth.php'),
+        ]);
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/portal-auth.php', 'portal-auth'
+        );
+
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'portal-auth');
         $this->loadRoutes();
@@ -150,8 +157,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function loadRoutes()
     {
-        Route::group([], __DIR__ . '/../routes/web.php');
-        Route::group([], __DIR__ . '/../routes/api.php');
+        Route::middleware(config('portal-auth.middleware.web'))->group(__DIR__ . '/../routes/web.php');
+        Route::middleware(config('portal-auth.middleware.api'))->group(__DIR__ . '/../routes/api.php');
     }
 
     public function overrideAuthConfig(Repository $config)
