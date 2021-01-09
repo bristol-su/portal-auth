@@ -4,5 +4,13 @@
 
 @section('content')
 
-    Password Confirmation
+    <form action="{{route('password.confirmation')}}" method="POST">
+        @csrf
+        <input type="Password" name="password" />
+        @if($errors->has('password'))
+            {{$errors->first('password')}}
+        @endif
+        <button type="submit">Confirm</button>
+    </form>
+
 @endsection
