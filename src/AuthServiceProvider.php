@@ -155,6 +155,10 @@ class AuthServiceProvider extends ServiceProvider
             });
         });
 
+        $this->app->extend(\Illuminate\Contracts\Debug\ExceptionHandler::class, function($baseHandler) {
+            return new Handler($baseHandler);
+        });
+
         $this->app['auth']->resolveUsersUsing(function() {
             return app()->make(AuthenticationUserResolver::class)->getUser();
         });

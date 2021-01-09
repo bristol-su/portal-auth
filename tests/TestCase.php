@@ -44,10 +44,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('app.key', 'base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=');
         $app['config']->set('mail.default', 'array');
 
-        $app->singleton(
-            \Illuminate\Contracts\Debug\ExceptionHandler::class,
-            Handler::class
-        );
         $this->addTestResponseMacros();
     }
 

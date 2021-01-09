@@ -3,23 +3,25 @@
 
 namespace BristolSU\Auth\Exceptions;
 
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Linkeys\UrlSigner\Exceptions\LinkNotFoundException;
 use Throwable;
 
-class Handler extends \Illuminate\Foundation\Exceptions\Handler
+class Handler implements ExceptionHandler
 {
 
     /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array
+     * @var ExceptionHandler
      */
-    protected $dontReport = [
-        EmailNotVerified::class,
-        PasswordUnconfirmed::class
-    ];
+    private ExceptionHandler $handler;
+
+    public function __construct(ExceptionHandler $handler)
+    {
+        $this->handler = $handler;
+    }
 
     /**
      * A list of the inputs that are never flashed for validation exceptions.
@@ -40,6 +42,7 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
     {
         if (!$request->expectsJson()) {
             if ($exception instanceof EmailNotVerified) {
+                redirect()->setIntendedUrl($request->path());
                 return redirect()->route('verify.notice');
             }
             if($exception instanceof LinkNotFoundException) {
@@ -47,6 +50,7 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
                 return redirect()->route('verify.notice');
             }
             if ($exception instanceof PasswordUnconfirmed) {
+                redirect()->setIntendedUrl($request->path());
                 return redirect()->route('password.confirmation.notice');
             }
         } else {
@@ -60,6 +64,26 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
                 return response()->json('This link has expired.', 403);
             }
         }
-        return parent::render($request, $exception);
+        return $this->handler->render($request, $exception);
+    }
+
+    public function report(Throwable $e)
+    {
+        if($e instanceof EmailNotVerified || $e instanceof PasswordUnconfirmed) {
+            return;
+        }
+
+        $this->handler->report($e);
+    }
+
+    public function shouldReport(Throwable $e)
+    {
+        return $this->handler->shouldReport($e);
+
+    }
+
+    public function renderForConsole($output, Throwable $e)
+    {
+        $this->handler->renderForConsole($output, $e);
     }
 }
