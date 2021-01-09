@@ -50,6 +50,16 @@ class AuthenticationUser extends Authenticatable implements MustVerifyEmailContr
     }
 
     /**
+     * Get the ID of the control
+     *
+     * @return int
+     */
+    public function id(): int
+    {
+        return (int) $this->id;
+    }
+
+    /**
      * Get the control user attached to this database user
      *
      * @return \BristolSU\ControlDB\Contracts\Models\User

@@ -115,4 +115,11 @@ class AuthenticationUserTest extends TestCase
         $this->assertNull($foundUser);
     }
 
+    /** @test */
+    public function id_returns_the_id_of_the_model(){
+        $user = AuthenticationUser::factory()->create();
+
+        $this->assertEquals($user->id, $user->id());
+    }
+
 }
