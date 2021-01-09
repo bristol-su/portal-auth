@@ -9,6 +9,7 @@ use BristolSU\Auth\Authentication\ControlResolver\Web as WebControlResolver;
 use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
 use BristolSU\Auth\Events\UserVerificationRequestGenerated;
+use BristolSU\Auth\Exceptions\Handler;
 use BristolSU\Auth\Listeners\SendVerificationEmail;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
 use BristolSU\Auth\Middleware\HasConfirmedPassword;
@@ -147,6 +148,16 @@ class AuthServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'portal-auth');
         $this->loadRoutes();
         $this->app->call([$this, 'overrideAuthConfig']);
+
+        $this->app->rebinding('request', function ($app, $request) {
+            $request->setUserResolver(function () use ($app) {
+                return $app->make(AuthenticationUserResolver::class)->getUser();
+            });
+        });
+
+        $this->app['auth']->resolveUsersUsing(function() {
+            return app()->make(AuthenticationUserResolver::class)->getUser();
+        });
 
         Event::listen(UserVerificationRequestGenerated::class, SendVerificationEmail::class);
 
