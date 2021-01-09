@@ -29,7 +29,7 @@ class ConfirmPasswordController
         $this->resetPasswordConfirmationTimeout($request);
 
         return redirect()->intended(
-            DefaultHome::getValueAsPath()
+            DefaultHome::getValueAsPath($request->user()->controlId())
         );
     }
 
@@ -41,7 +41,7 @@ class ConfirmPasswordController
      */
     protected function resetPasswordConfirmationTimeout(Request $request)
     {
-        $request->session()->put('auth.password_confirmed_at', Carbon::now()->unix());
+        $request->session()->put('portal-auth.password_confirmed_at', Carbon::now()->unix());
     }
 
 

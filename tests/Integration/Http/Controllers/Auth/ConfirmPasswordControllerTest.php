@@ -97,7 +97,7 @@ class ConfirmPasswordControllerTest extends TestCase
         $new = Carbon::now();
         Carbon::setTestNow($new);
 
-        Session::put('auth.password_confirmed_at', $original->unix());
+        Session::put('portal-auth.password_confirmed_at', $original->unix());
 
         Route::name('abc123-test')->get('test1', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
@@ -113,7 +113,7 @@ class ConfirmPasswordControllerTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-        $this->assertEquals($new->unix(), Session::get('auth.password_confirmed_at', null));
+        $this->assertEquals($new->unix(), Session::get('portal-auth.password_confirmed_at', null));
 
     }
 
