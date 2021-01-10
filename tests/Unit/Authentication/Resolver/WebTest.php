@@ -38,8 +38,8 @@ class WebTest extends TestCase
         $user = AuthenticationUser::factory()->create();
 
         $factory = $this->prophesize(Factory::class);
-        $guard = $this->prophesize(Guard::class);
-        $guard->setUser(Argument::that(function($arg) use ($user) {
+        $guard = $this->prophesize(StatefulGuard::class);
+        $guard->login(Argument::that(function($arg) use ($user) {
             return $arg instanceof AuthenticationUser && $arg->is($user);
         }))->shouldBeCalled()->willReturn(false);
         $factory->guard('web')->shouldBeCalled()->willReturn($guard->reveal());

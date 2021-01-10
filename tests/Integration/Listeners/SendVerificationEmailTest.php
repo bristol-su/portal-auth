@@ -4,6 +4,7 @@ namespace BristolSU\Auth\Tests\Integration\Listeners;
 
 use BristolSU\Auth\Notifications\VerifyEmail;
 use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
 use BristolSU\Auth\Tests\TestCase;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Support\Facades\Queue;
@@ -14,6 +15,7 @@ class SendVerificationEmailTest extends TestCase
 
     /** @test */
     public function it_triggers_when_the_verification_event_is_dispatched(){
+        ShouldVerifyEmail::setValue(false);
         Queue::fake();
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));

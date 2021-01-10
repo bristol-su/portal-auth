@@ -14,6 +14,7 @@ use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Messaging\AlreadyRegisteredMessage;
 use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
+use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository;
 use BristolSU\ControlDB\Contracts\Models\DataUser;
@@ -70,6 +71,9 @@ class RegisterController extends Controller
         if(!$user->hasVerifiedEmail()) {
             event(new UserVerificationRequestGenerated($user));
 
+            if(ShouldVerifyEmail::getValue()) {
+                return redirect()->route('verify.notice');
+            }
         }
 
         return redirect()->route(DefaultHome::getValueAsRouteName($user->controlId()));
