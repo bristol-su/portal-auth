@@ -169,7 +169,7 @@ class HandlerTest extends TestCase
     public function the_intended_url_is_set_for_a_web_EmailNotVerified_exception(){
         $handler = $this->prophesize(ExceptionHandler::class);
         $handler = new Handler($handler->reveal());
-        
+
         $request = $this->prophesize(Request::class);
         $request->expectsJson()->willReturn(false);
         $request->path()->willReturn('test1');
@@ -182,6 +182,26 @@ class HandlerTest extends TestCase
         $this->assertArrayHasKey('url', Session::all());
         $this->assertArrayHasKey('intended', Session::all()['url']);
         $this->assertEquals('test1', Session::get('url.intended'));
+    }
+
+    /** @test */
+    public function shouldReport_calls_the_underlying_handler_instance(){
+        $exception = new \Exception();
+        $handler = $this->prophesize(ExceptionHandler::class);
+        $handler->shouldReport($exception)->shouldBeCalled()->willReturn('test');
+        $handler = new Handler($handler->reveal());
+
+        $handler->shouldReport($exception);
+    }
+
+    /** @test */
+    public function renderForConsole_calls_the_underlying_handler_instance(){
+        $exception = new \Exception();
+        $handler = $this->prophesize(ExceptionHandler::class);
+        $handler->renderForConsole('output', $exception)->shouldBeCalled()->willReturn('test');
+        $handler = new Handler($handler->reveal());
+
+        $handler->renderForConsole('output', $exception);
     }
 
 }
