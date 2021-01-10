@@ -1,10 +1,12 @@
 <?php
 
 
+use BristolSU\Auth\Http\Controllers\Auth\ForgotPasswordController;
 use BristolSU\Auth\Http\Controllers\Auth\LoginController;
 use BristolSU\Auth\Http\Controllers\Auth\ConfirmPasswordController;
 use BristolSU\Auth\Http\Controllers\Auth\LogoutController;
 use BristolSU\Auth\Http\Controllers\Auth\RegisterController;
+use BristolSU\Auth\Http\Controllers\Auth\ResetPasswordController;
 use BristolSU\Auth\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +17,22 @@ Route::middleware('portal-guest')->group(function() {
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [RegisterController::class, 'register'])->name('register.action');
 
+    Route::get('/password/forgot', [ForgotPasswordController::class, 'showForm'])->name('password.forgot');
+    Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLink'])->name('password.forgot.action');
 
 });
 
-Route::middleware('portal-auth')->name('logout')
-    ->post('logout', [LogoutController::class, 'logout']);
+Route::middleware('portal-auth')->group(function() {
+    Route::middleware('portal-auth')->name('logout')
+        ->post('logout', [LogoutController::class, 'logout']);
+
+    Route::middleware(['link', 'portal-throttle:3,1'])->group(function() {
+        Route::get('/password/reset', [ResetPasswordController::class, 'showForm'])->name('password.reset');
+        Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword'])->name('password.reset.action');
+    });
+
+});
+
 
 Route::middleware(['portal-auth', 'portal-not-verified'])->group(function() {
     Route::get('verify', [VerifyEmailController::class, 'showVerifyPage'])->name('verify.notice');

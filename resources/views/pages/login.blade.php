@@ -20,5 +20,6 @@
     </form>
 
     <a href="{{route('register')}}">Register</a>
+    <a href="{{route('password.forgot')}}">Forgot Password</a>
 
 @endsection
