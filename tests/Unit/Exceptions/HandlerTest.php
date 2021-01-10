@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Linkeys\UrlSigner\Exceptions\LinkNotFoundException;
 use Prophecy\Argument;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class HandlerTest extends TestCase
 {
@@ -197,11 +198,13 @@ class HandlerTest extends TestCase
     /** @test */
     public function renderForConsole_calls_the_underlying_handler_instance(){
         $exception = new \Exception();
+        $output = $this->prophesize(OutputInterface::class);
+
         $handler = $this->prophesize(ExceptionHandler::class);
-        $handler->renderForConsole('output', $exception)->shouldBeCalled()->willReturn('test');
+        $handler->renderForConsole($output->reveal(), $exception)->shouldBeCalled()->willReturn('test');
         $handler = new Handler($handler->reveal());
 
-        $handler->renderForConsole('output', $exception);
+        $handler->renderForConsole($output->reveal(), $exception);
     }
 
 }
