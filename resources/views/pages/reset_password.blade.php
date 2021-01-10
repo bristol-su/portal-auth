@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <form action="{{$formUrl}}" method="POST">
+    <form action="{{route('password.reset.action')}}" method="POST">
         @csrf
         <input type="text" disabled value="{{$email}}" placeholder="Your email address" name="identifier" />
         @if($errors->has('identifier'))

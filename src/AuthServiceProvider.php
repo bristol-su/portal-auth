@@ -8,9 +8,11 @@ use BristolSU\Auth\Authentication\ControlResolver\Api as ApiControlResolver;
 use BristolSU\Auth\Authentication\ControlResolver\Web as WebControlResolver;
 use BristolSU\Auth\Authentication\Resolver\Api as UserApiResolver;
 use BristolSU\Auth\Authentication\Resolver\Web as UserWebResolver;
+use BristolSU\Auth\Events\PasswordHasBeenReset;
 use BristolSU\Auth\Events\PasswordResetRequestGenerated;
 use BristolSU\Auth\Events\UserVerificationRequestGenerated;
 use BristolSU\Auth\Exceptions\Handler;
+use BristolSU\Auth\Listeners\SendPasswordHasBeenResetEmail;
 use BristolSU\Auth\Listeners\SendResetPasswordEmail;
 use BristolSU\Auth\Listeners\SendVerificationEmail;
 use BristolSU\Auth\Middleware\CheckAdditionalCredentialsOwnedByUser;
@@ -167,6 +169,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Event::listen(UserVerificationRequestGenerated::class, SendVerificationEmail::class);
         Event::listen(PasswordResetRequestGenerated::class, SendResetPasswordEmail::class);
+        Event::listen(PasswordHasBeenReset::class, SendPasswordHasBeenResetEmail::class);
 
     }
 
