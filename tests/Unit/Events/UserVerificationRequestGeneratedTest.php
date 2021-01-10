@@ -1,6 +1,6 @@
 <?php
 
-namespace BristolSU\Auth\Tests\Unit;
+namespace BristolSU\Auth\Tests\Unit\Events;
 
 use BristolSU\Auth\Events\UserVerificationRequestGenerated;
 use BristolSU\Auth\Tests\TestCase;

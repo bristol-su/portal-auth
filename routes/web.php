@@ -18,25 +18,20 @@ Route::middleware('portal-guest')->group(function() {
     Route::post('register', [RegisterController::class, 'register'])->name('register.action');
 
     Route::get('/password/forgot', [ForgotPasswordController::class, 'showForm'])->name('password.forgot');
-    Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLink'])->name('password.forgot.action');
+    Route::middleware('portal-throttle:3,1')
+        ->post('/password/forgot', [ForgotPasswordController::class, 'sendResetLink'])->name('password.forgot.action');
 
     Route::middleware(['link', 'portal-throttle:3,1'])->group(function() {
         Route::get('/password/reset', [ResetPasswordController::class, 'showForm'])->name('password.reset');
-    });
-
-});
-Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword'])->name('password.reset.action');
-
-Route::middleware('portal-auth')->group(function() {
-    Route::middleware(['portal-throttle:3,1'])->group(function() {
         Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset.action');
     });
 
+});
+
+Route::middleware('portal-auth')->group(function() {
 
     Route::name('logout')
         ->post('logout', [LogoutController::class, 'logout']);
-
-
 
 });
 

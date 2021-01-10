@@ -9,7 +9,6 @@ use BristolSU\Auth\Http\Requests\Auth\ResetPasswordRequest;
 use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\User\AuthenticationUserRepository;
-use BristolSU\Support\Authentication\Contracts\Authentication;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -19,26 +18,35 @@ use Linkeys\UrlSigner\Facade\UrlSigner;
 class ResetPasswordController extends Controller
 {
 
-    public function showForm(Request $request,
-                             AuthenticationUserRepository $userRepository,
-                             AuthenticationUserResolver $userResolver)
+    /**
+     * @var AuthenticationUserRepository
+     */
+    private AuthenticationUserRepository $userRepository;
+
+    public function __construct(AuthenticationUserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    public function showForm(Request $request)
     {
 
-        $user = $this->getUser($request, $userRepository);
-        $userResolver->setUser($user);
+        $user = $this->getUser($request);
 
         return view('portal-auth::pages.reset_password')->with([
-            'email' => $user->controlUser()->data()->email()
+            'email' => $user->controlUser()->data()->email(),
+            'formUrl' => $this->generateResetFormUrl($user)
         ]);
     }
 
     public function reset(ResetPasswordRequest $request, AuthenticationUserResolver $userResolver)
     {
-        $user = $userResolver->getUser();
-        $password = $request->input('password');
+        $user = $this->getUser($request);
 
-        $user->password = Hash::make($password);
+        $user->password = Hash::make($request->input('password'));
         $user->save();
+
+        $userResolver->setUser($user);
 
         event(new PasswordHasBeenReset($user));
 
@@ -56,10 +64,25 @@ class ResetPasswordController extends Controller
      * @return AuthenticationUser
      * @throws ModelNotFoundException
      */
-    protected function getUser(Request $request, AuthenticationUserRepository $userRepository): AuthenticationUser
+    protected function getUser(Request $request): AuthenticationUser
     {
         $id = $request->get('user_id');
-        return $userRepository->getById($id);
+        return $this->userRepository->getById($id);
+    }
+
+    /**
+     * Generate a url to use for the reset function
+     *
+     * @param AuthenticationUser $user
+     * @return mixed
+     */
+    protected function generateResetFormUrl(AuthenticationUser $user)
+    {
+        return UrlSigner::sign(
+            app(UrlGenerator::class)->route('password.reset.action'),
+            ['user_id' => $user->id()],
+            '+30 minutes'
+        )->getFullUrl();
     }
 
 }
