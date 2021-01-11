@@ -24,8 +24,7 @@
         "bristol-su/support": "dev-portal-226",
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
-        "ext-json": "*",
-        "twigger/blade-themes": "dev-develop"
+        "ext-json": "*"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
@@ -56,5 +55,6 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always --process-isolation --verbose --configuration phpunit.xml"
-    }
+    },
+    "minimum-stability": "dev"
 }

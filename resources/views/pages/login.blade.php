@@ -16,7 +16,9 @@
             {{$errors->first('password')}}
         @endif
 
-        <button type="submit">Login</button>
+        <x-portal-button type="submit">
+            Login
+        </x-portal-button>
     </form>
 
     <a href="{{route('register')}}">Register</a>
