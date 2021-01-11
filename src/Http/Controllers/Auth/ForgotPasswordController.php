@@ -32,7 +32,7 @@ class ForgotPasswordController extends Controller
             $user = $authenticationUserRepository->getFromControlId($controlUser->id());
         } catch (ModelNotFoundException $e) {
             throw ValidationException::withMessages([
-                'identifier' => 'A user account with the given email address could not be found'
+                'identifier' => 'A user account with the given identifier could not be found'
             ]);
         }
 
