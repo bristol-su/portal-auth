@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79d65dd647c1cc62eb89d9d389d85701",
+    "content-hash": "8cdcd0adb8de78c4643b5fa54ef61406",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -213,16 +213,16 @@
         },
         {
             "name": "bristol-su/support",
-            "version": "dev-portal-226",
+            "version": "dev-portal-v4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bristol-su/support.git",
-                "reference": "17a825849c3516cd17cdf15e78623f8bc9023b33"
+                "reference": "cb39f9da78ea855f582290be2116cb1a2cb46c03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bristol-su/support/zipball/17a825849c3516cd17cdf15e78623f8bc9023b33",
-                "reference": "17a825849c3516cd17cdf15e78623f8bc9023b33",
+                "url": "https://api.github.com/repos/bristol-su/support/zipball/cb39f9da78ea855f582290be2116cb1a2cb46c03",
+                "reference": "cb39f9da78ea855f582290be2116cb1a2cb46c03",
                 "shasum": ""
             },
             "require": {
@@ -287,9 +287,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bristol-su/support/issues",
-                "source": "https://github.com/bristol-su/support/tree/portal-226"
+                "source": "https://github.com/bristol-su/support/tree/portal-v4"
             },
-            "time": "2021-01-12T01:05:43+00:00"
+            "time": "2021-01-12T02:37:16+00:00"
         },
         {
             "name": "doctrine/annotations",

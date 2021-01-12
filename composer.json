@@ -21,7 +21,7 @@
         "php": "^7.4",
         "laravel/framework": "^8.0",
         "bristol-su/control": "dev-laravel-8",
-        "bristol-su/support": "dev-portal-226",
+        "bristol-su/support": "dev-portal-v4",
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
         "ext-json": "*"
