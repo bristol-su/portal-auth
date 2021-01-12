@@ -2,7 +2,7 @@
 
 namespace BristolSU\Auth\Middleware;
 
-use BristolSU\Auth\Settings\Login\DefaultHome;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Support\Authentication\Contracts\Authentication;
 use Illuminate\Http\Request;
 
@@ -30,7 +30,7 @@ class IsGuest
     {
         $user = $this->authentication->getUser();
         if($user !== null) {
-            return redirect()->route(DefaultHome::getValue($this->authentication->getUser()->id()));
+            return redirect()->route(DefaultHome::getValueAsRouteName($user->id()));
         }
         return $next($request);
     }

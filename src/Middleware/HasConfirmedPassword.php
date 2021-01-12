@@ -3,7 +3,8 @@
 namespace BristolSU\Auth\Middleware;
 
 use BristolSU\Auth\Exceptions\PasswordUnconfirmed;
-use BristolSU\Auth\Settings\Login\PasswordConfirmationTimeout;
+use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,7 @@ class HasConfirmedPassword
     protected function shouldConfirmPassword(Request $request): bool
     {
         // How many seconds have passed since the password was last confirmed.
-        $confirmedAt = time() - $request->session()->get('portal-auth.password_confirmed_at', 0);
+        $confirmedAt = Carbon::now()->unix() - $request->session()->get('portal-auth.password_confirmed_at', 0);
 
         return $confirmedAt > PasswordConfirmationTimeout::getValue();
     }

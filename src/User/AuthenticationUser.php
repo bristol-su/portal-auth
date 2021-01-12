@@ -10,14 +10,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\ValidationException;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * Represents a user in the database
  */
 class AuthenticationUser extends Authenticatable implements MustVerifyEmailContract
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable;
 
     protected $table = 'authentication_users';
 
@@ -47,6 +46,16 @@ class AuthenticationUser extends Authenticatable implements MustVerifyEmailContr
     public function controlId(): int
     {
         return (int) $this->control_id;
+    }
+
+    /**
+     * Get the ID of the control
+     *
+     * @return int
+     */
+    public function id(): int
+    {
+        return (int) $this->id;
     }
 
     /**
