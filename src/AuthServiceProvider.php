@@ -108,10 +108,10 @@ class AuthServiceProvider extends ServiceProvider
     {
 
         $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-verified', HasVerifiedEmail::class);
         $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-guest', IsGuest::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-confirmed', HasConfirmedPassword::class);
+        $this->app['router']->aliasMiddleware('portal-verified', HasVerifiedEmail::class);
+        $this->app['router']->aliasMiddleware('portal-guest', IsGuest::class);
+        $this->app['router']->aliasMiddleware('portal-confirmed', HasConfirmedPassword::class);
         $this->app['router']->aliasMiddleware('portal-throttle', ThrottleRequests::class);
         $this->app['router']->aliasMiddleware('portal-not-verified', HasNotVerifiedEmail::class);
 
