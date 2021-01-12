@@ -80,7 +80,7 @@ class ResetPasswordControllerTest extends TestCase
     public function showForm_passes_a_reset_link_url_that_allows_resetPassword_to_be_called(){
         $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
-        $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => Carbon::now()]);
+        $user = AuthenticationUser::factory()->create(['id' => 1002, 'control_id' => $controlUser->id(), 'email_verified_at' => Carbon::now()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
         DefaultHome::setValue('abc123-test', $user->controlId());
@@ -344,7 +344,7 @@ class ResetPasswordControllerTest extends TestCase
             'password' => 'secret123',
             'password_confirmation' => 'secret123'
         ]);
-        
+
         $response->assertStatus(302);
         $response->assertRedirect('http://localhost/portal-new');
     }

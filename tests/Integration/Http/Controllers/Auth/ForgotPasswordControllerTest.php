@@ -14,6 +14,7 @@ use BristolSU\ControlDB\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class ForgotPasswordControllerTest extends TestCase
 {
@@ -115,7 +116,7 @@ class ForgotPasswordControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_fires_an_event_with_the_correct_user(){
+    public function sendResetLink_fires_an_event_with_the_correct_user(){
         Event::fake();
         $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
@@ -132,7 +133,7 @@ class ForgotPasswordControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_showForm(){
+    public function sendResetLink_redirects_to_showForm(){
         $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
@@ -141,6 +142,26 @@ class ForgotPasswordControllerTest extends TestCase
             'identifier' => 'example@portal.com'
         ]);
         $response->assertRedirect('password/forgot');
+    }
+
+    /** @test */
+    public function sendResetLink_saves_a_message_to_the_session(){
+        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
+        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
+
+        $response = $this->from('login-1')->post('/password/forgot', [
+            'identifier' => 'test@example.com'
+        ]);
+
+        $response->assertSessionHas('messages');
+        $this->assertIsArray(Session::get('messages'));
+        $this->assertCount(1, Session::get('messages'));
+        $this->assertEquals([
+            'type' => 'success',
+            'message' => sprintf('We\'ve sent a password reset email to test@example.com')
+        ], Session::get('messages')[0]);
+
     }
 
 

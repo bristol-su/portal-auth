@@ -2,16 +2,16 @@
 
 namespace BristolSU\Auth\Tests\Integration\Http\Controllers\Auth;
 
-use BristolSU\Auth\Authentication\Contracts\AuthenticationUserResolver;
 use BristolSU\Auth\Events\UserVerificationRequestGenerated;
-use BristolSU\Auth\Http\Controllers\Auth\VerifyEmailController;
 use BristolSU\Auth\Settings\Access\DefaultHome;
-use BristolSU\Auth\Settings\Security\UnauthenticatedVerificationAllowed;
 use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
+use BristolSU\ControlDB\Models\DataUser;
+use BristolSU\ControlDB\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class VerifyEmailControllerTest extends TestCase
 {
@@ -30,7 +30,7 @@ class VerifyEmailControllerTest extends TestCase
 
     /** @test */
     public function showVerifyPage_returns_the_correct_view(){
-        $user = AuthenticationUser::factory()->create(['email_verified_at' => null]);
+        $user = AuthenticationUser::factory()->create(['id' => 100, 'email_verified_at' => null]);
         $this->be($user, 'web');
 
         $response = $this->get('/verify');
@@ -54,6 +54,26 @@ class VerifyEmailControllerTest extends TestCase
         $response->assertRedirect('http://localhost/verify');
 
         Event::assertDispatched(UserVerificationRequestGenerated::class);
+    }
+
+    /** @test */
+    public function resend_flashes_a_message_to_the_session(){
+
+        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
+        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
+        $this->be($user, 'web');
+
+        $response = $this->from('login-1')->post('/verify/resend');
+
+        $response->assertSessionHas('messages');
+        $this->assertIsArray(Session::get('messages'));
+        $this->assertCount(1, Session::get('messages'));
+        $this->assertEquals([
+            'type' => 'success',
+            'message' => sprintf('We\'ve sent another verification email to test@example.com')
+        ], Session::get('messages')[0]);
+
     }
 
     /** @test */

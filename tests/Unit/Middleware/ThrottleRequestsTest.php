@@ -31,7 +31,7 @@ class ThrottleRequestsTest extends TestCase
 
     /** @test */
     public function it_throttles_based_on_user_id(){
-        $user = AuthenticationUser::factory()->create();
+        $user = AuthenticationUser::factory()->create(['id' => 5000]);
         $this->be($user, 'web');
 
         Route::middleware(['portal-throttle:3,2'])->name('test')->get('test', fn() => response('Test', 200));

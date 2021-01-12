@@ -1,26 +1,65 @@
 @extends('bristolsu::base')
 
-@section('title', 'Login')
+@section('title', 'Register')
 
 @section('content')
 
-    <form action="{{route('register.action')}}" method="POST">
-        @csrf
-        Email: <input type="text" placeholder="Your email address" name="identifier" />
-        @if($errors->has('identifier'))
-            {{$errors->first('identifier')}}
-        @endif
+    <x-portal-card
+            title="Register">
+        <x-slot name="body">
+            <form action="{{route('register.action')}}" method="POST">
+                @csrf
 
-        Password: <input type="password" name="password" />
-        @if($errors->has('password'))
-            {{$errors->first('password')}}
-        @endif
+                <x-portal-text
+                        id="identifier"
+                        name="identifier"
+                        :label="\Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue())"
+                        help="Enter the {{\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()}} you would like to use to log in."
+                        sr-label="Enter the {{\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()}} you would like to use to log in."
+                        :errors="$errors->get('identifier')"
+                        :validated="$errors->has('identifier')"
+                        :required="true"
+                        :value="old('identifier')"
+                >
 
-        Password Confirmation: <input type="password" name="password_confirmation" />
+                </x-portal-text>
 
-        <button type="submit">Register</button>
-    </form>
+                <x-portal-password
+                        id="password"
+                        name="password"
+                        label="Password"
+                        help="Enter a secure password to protect your account."
+                        sr-label="Enter a secure password to protect your account."
+                        :errors="$errors->get('password')"
+                        :validated="$errors->has('password')"
+                        :required="true"
+                >
 
-    <a href="{{route('login')}}">Login</a>
+                </x-portal-password>
+
+                <x-portal-password
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        label="Confirm Password"
+                        help="Enter your password again."
+                        sr-label="Enter your password again."
+                        :errors="$errors->get('password_confirmation')"
+                        :validated="$errors->has('password_confirmation')"
+                        :required="true"
+                >
+
+                </x-portal-password>
+
+                <x-portal-button type="submit">
+                    Register
+                </x-portal-button>
+
+            </form>
+        </x-slot>
+        <x-slot name="actions">
+            <x-portal-link href="{{route('login')}}">Login</x-portal-link>
+        </x-slot>
+
+    </x-portal-card>
 
 @endsection
