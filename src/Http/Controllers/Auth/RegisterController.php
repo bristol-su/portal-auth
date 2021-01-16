@@ -17,6 +17,9 @@ use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository;
+use BristolSU\Auth\Work\GetAuthenticationUserUnit;
+use BristolSU\Auth\Work\GetControlUserUnit;
+use BristolSU\Auth\Work\GetDataUserUnit;
 use BristolSU\ControlDB\Contracts\Models\DataUser;
 use BristolSU\ControlDB\Contracts\Models\User;
 use BristolSU\ControlDB\Contracts\Repositories\DataUser as DataUserRepository;
@@ -90,7 +93,6 @@ class RegisterController extends Controller
     {
         // Get the data user, or create one if it doesn't exist.
         $dataUser = $this->registerDataUser($request->input('identifier'));
-
         // Get the control user, or create one if it doesn't exist
         $controlUser = $this->registerControlUser($dataUser);
 
@@ -109,21 +111,7 @@ class RegisterController extends Controller
      */
     protected function registerDataUser(string $identifier): DataUser
     {
-        $parameters = [IdentifierAttribute::getValue() => $identifier];
-        try {
-            return app(DataUserRepository::class)->getWhere($parameters);
-        } catch (ModelNotFoundException $e) {
-            if (DataUserRegistrationEnabled::getValue()) {
-                $functionParameters = array_merge([
-                    'firstName' => null, 'lastName' => null, 'email' => null, 'dob' => null, 'preferredName' => null
-                ], $parameters);
-                return app()->call(DataUserRepository::class . '@create', $functionParameters);
-            }
-        }
-
-        throw ValidationException::withMessages([
-            'identifier' => DataUserRegistrationNotAllowedMessage::getValue()
-        ]);
+        return app(GetDataUserUnit::class)->do($identifier);
     }
 
     /**
@@ -135,17 +123,7 @@ class RegisterController extends Controller
      */
     protected function registerControlUser(DataUser $dataUser): User
     {
-        try {
-            return app(UserRepository::class)->getByDataProviderId($dataUser->id());
-        } catch (ModelNotFoundException $e) {
-            if (ControlUserRegistrationEnabled::getValue()) {
-                return app(UserRepository::class)->create($dataUser->id());
-            }
-        }
-
-        throw ValidationException::withMessages([
-            'identifier' => ControlUserRegistrationNotAllowedMessage::getValue()
-        ]);
+        return app(GetControlUserUnit::class)->do($dataUser);
     }
 
     /**
@@ -158,20 +136,10 @@ class RegisterController extends Controller
      */
     protected function registerAuthenticationUser(User $controlUser, string $password): AuthenticationUser
     {
-        // Check if the user has already registered
-        try {
-            $user = app(AuthenticationUserRepository::class)->getFromControlId($controlUser->id());
-            throw ValidationException::withMessages([
-                'identifier' => AlreadyRegisteredMessage::getValue()
-            ]);
-        } catch (ModelNotFoundException $e) {
-            // The user hasn't been created yet.
-        }
-
-        $user = app(AuthenticationUserRepository::class)->create(['control_id' => $controlUser->id()]);
-        $user->password = Hash::make($password);
-        $user->save();
-        return $user;
+        $authenticationUser = app(GetAuthenticationUserUnit::class)->do($controlUser);
+        $authenticationUser->password = Hash::make($password);
+        $authenticationUser->save();
+        return $authenticationUser;
     }
 
 }
