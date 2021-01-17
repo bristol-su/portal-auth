@@ -22,17 +22,19 @@ class GetDataUserUnit
 
     /**
      * @param string $identifier
+     * @param string|null $identifierKey The key for the identifier. Will take from settings if not provided
+     * @param array $extraParams Any extra parameters to give a new data user.
      * @return \BristolSU\ControlDB\Contracts\Models\DataUser
      * @throws ValidationException
      */
-    public function do(string $identifier)
+    public function do(string $identifier, string $identifierKey = null, array $extraParams = [])
     {
-        $parameters = [IdentifierAttribute::getValue() => $identifier];
+        $parameters = [$identifierKey ?? IdentifierAttribute::getValue() => $identifier];
         try {
             return $this->dataUserRepository->getWhere($parameters);
         } catch (ModelNotFoundException $e) {
             if (DataUserRegistrationEnabled::getValue()) {
-                return $this->registerUnit->do($parameters);
+                return $this->registerUnit->do(array_merge($extraParams, $parameters));
             }
         }
 

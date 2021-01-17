@@ -50,6 +50,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Socialite\SocialiteServiceProvider;
 
 /**
  * Database user service provider
@@ -63,6 +64,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(SocialiteServiceProvider::class);
+
         $this->app->bind(AuthenticationUserRepositoryContract::class, AuthenticationUserRepository::class);
         $this->app->bind(SocialUserRepositoryContract::class, SocialUserRepository::class);
         $this->app->call([$this, 'registerAuthenticationResolver']);
@@ -71,6 +74,7 @@ class AuthServiceProvider extends ServiceProvider
         Auth::provider('portal-user-provider', function(Container $app, array $config) {
             return $app->make(AuthenticationUserProvider::class);
         });
+
     }
 
     /**
@@ -173,6 +177,12 @@ class AuthServiceProvider extends ServiceProvider
         Event::listen(PasswordResetRequestGenerated::class, SendResetPasswordEmail::class);
         Event::listen(PasswordHasBeenReset::class, SendPasswordHasBeenResetEmail::class);
 
+        // Register services for socialite
+        /** @var Repository $config */
+        $config = $this->app['config'];
+        $config->set('services.github.client_id', env('GITHUB_CLIENT_ID'));
+        $config->set('services.github.client_secret', env('GITHUB_SECRET'));
+        $config->set('services.github.redirect', '/login/social/github/callback');
     }
 
     /**
