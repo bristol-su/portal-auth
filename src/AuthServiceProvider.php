@@ -36,6 +36,8 @@ use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Settings\Security\SecurityGroup;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
+use BristolSU\Auth\Social\Contracts\SocialUserRepository as SocialUserRepositoryContract;
+use BristolSU\Auth\Social\SocialUserRepository;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\User\AuthenticationUserRepository;
 use BristolSU\Auth\User\Contracts\AuthenticationUserRepository as AuthenticationUserRepositoryContract;
@@ -62,7 +64,7 @@ class AuthServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(AuthenticationUserRepositoryContract::class, AuthenticationUserRepository::class);
-
+        $this->app->bind(SocialUserRepositoryContract::class, SocialUserRepository::class);
         $this->app->call([$this, 'registerAuthenticationResolver']);
         $this->app->call([$this, 'registerControlResolver']);
 

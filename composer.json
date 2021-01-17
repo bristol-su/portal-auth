@@ -37,7 +37,8 @@
         "psr-4": {
             "BristolSU\\Auth\\": "src/",
             "Database\\Auth\\Factories\\": "database/factories/",
-            "Database\\Auth\\Seeders\\": "database/seeders/"
+            "Database\\Auth\\Seeders\\": "database/seeders/",
+            "Database\\Auth\\Migrations\\": "database/migrations/"
         }
     },
     "autoload-dev": {
