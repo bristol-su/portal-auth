@@ -18,8 +18,10 @@ Route::middleware('portal-guest')->group(function() {
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('register', [RegisterController::class, 'register'])->name('register.action');
 
-    Route::get('/login/social/{driver}', [SocialLoginController::class, 'redirect'])->name('social.login');
-    Route::get('/login/social/{driver}/callback', [SocialLoginController::class, 'callback'])->name('social.callback');
+    Route::middleware('socialite')->group(function() {
+        Route::get('/login/social/{driver}', [SocialLoginController::class, 'redirect'])->name('social.login');
+        Route::get('/login/social/{driver}/callback', [SocialLoginController::class, 'callback'])->name('social.callback');
+    });
 
     Route::get('/password/forgot', [ForgotPasswordController::class, 'showForm'])->name('password.forgot');
     Route::middleware('portal-throttle:3,1')

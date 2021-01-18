@@ -10,6 +10,7 @@ use BristolSU\Support\Testing\AssertsEloquentModels;
 use BristolSU\Support\Testing\HandlesAuthentication;
 use BristolSU\Support\Theme\ThemeServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\MessageBag;
 use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
@@ -31,6 +32,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         parent::setUp();
         $this->loadMigrationsFrom(realpath(__DIR__.'/../database/migrations'));
         $this->withFactories(__DIR__.'/../database/factories');
+
     }
 
     public function getEnvironmentSetUp($app)
@@ -42,6 +44,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
+        $app['config']->set('cache.default', 'array');
         $app['config']->set('app.key', 'base64:UTyp33UhGolgzCK5CJmT+hNHcA+dJyp3+oINtX+VoPI=');
         $app['config']->set('mail.default', 'array');
 

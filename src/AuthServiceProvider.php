@@ -36,6 +36,12 @@ use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Settings\Security\SecurityGroup;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
+use BristolSU\Auth\Social\Http\Middleware\LoadsSocialite;
+use BristolSU\Auth\Social\Settings\Providers\Github\GithubClientId;
+use BristolSU\Auth\Social\Settings\Providers\Github\GithubClientSecret;
+use BristolSU\Auth\Social\Settings\Providers\Github\GithubEnabled;
+use BristolSU\Auth\Social\Settings\Providers\Github\GithubGroup;
+use BristolSU\Auth\Social\Settings\SocialDriversCategory;
 use BristolSU\Auth\Social\Contracts\SocialUserRepository as SocialUserRepositoryContract;
 use BristolSU\Auth\Social\SocialUserRepository;
 use BristolSU\Auth\User\AuthenticationUser;
@@ -120,6 +126,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('portal-confirmed', HasConfirmedPassword::class);
         $this->app['router']->aliasMiddleware('portal-throttle', ThrottleRequests::class);
         $this->app['router']->aliasMiddleware('portal-not-verified', HasNotVerifiedEmail::class);
+        $this->app['router']->aliasMiddleware('socialite', LoadsSocialite::class);
 
         $this->registerSettings()
             ->category(new AuthCategory())
@@ -146,6 +153,13 @@ class AuthServiceProvider extends ServiceProvider
             ->registerSetting(new ControlUserRegistrationNotAllowedMessage())
             ->registerSetting(new DataUserRegistrationNotAllowedMessage())
             ->registerSetting(new AlreadyRegisteredMessage());
+
+        $this->registerSettings()
+            ->category(new SocialDriversCategory())
+            ->group(new GithubGroup())
+            ->registerSetting(new GithubEnabled())
+            ->registerSetting(new GithubClientId())
+            ->registerSetting(new GithubClientSecret());
 
         $this->publishes([
             __DIR__.'/../config/portal-auth.php' => config_path('portal-auth.php'),
@@ -177,12 +191,14 @@ class AuthServiceProvider extends ServiceProvider
         Event::listen(PasswordResetRequestGenerated::class, SendResetPasswordEmail::class);
         Event::listen(PasswordHasBeenReset::class, SendPasswordHasBeenResetEmail::class);
 
-        // Register services for socialite
-        /** @var Repository $config */
-        $config = $this->app['config'];
-        $config->set('services.github.client_id', env('GITHUB_CLIENT_ID'));
-        $config->set('services.github.client_secret', env('GITHUB_SECRET'));
-        $config->set('services.github.redirect', '/login/social/github/callback');
+        LoadsSocialite::loadDriver('github', function(Repository $config) {
+            if(GithubEnabled::getValue() === true) {
+                $config->set('services.github.client_id', GithubClientId::getValue());
+                $config->set('services.github.client_secret', GithubClientSecret::getValue());
+                $config->set('services.github.redirect', '/login/social/github/callback');
+            }
+        });
+
     }
 
     /**

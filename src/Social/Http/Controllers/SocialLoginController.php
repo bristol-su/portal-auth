@@ -3,7 +3,6 @@
 namespace BristolSU\Auth\Social\Http\Controllers;
 
 use BristolSU\Auth\Http\Controllers\Controller;
-use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Social\Contracts\SocialUserRepository;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
