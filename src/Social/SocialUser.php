@@ -21,7 +21,13 @@ class SocialUser extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'authentication_user_id',
+        'provider',
+        'provider_id',
+        'email',
+        'name'
+    ];
 
     public function authenticationUser()
     {

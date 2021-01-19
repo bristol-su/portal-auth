@@ -5,6 +5,7 @@ namespace BristolSU\Auth\Http\Controllers\Auth;
 use BristolSU\Auth\Http\Controllers\Controller;
 use BristolSU\Auth\Http\Requests\Auth\LoginRequest;
 use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Auth\Social\Driver\DriverStore;
 use BristolSU\Support\Authentication\Contracts\Authentication;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Cache\RateLimiter;
@@ -42,9 +43,11 @@ class LoginController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function showLoginForm()
+    public function showLoginForm(DriverStore $driverStore)
     {
-        return view('portal-auth::pages.login');
+        return view('portal-auth::pages.login', [
+            'social' => $driverStore->allEnabled()
+        ]);
     }
 
     /**

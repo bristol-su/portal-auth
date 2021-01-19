@@ -28,4 +28,8 @@ class SocialUserRepositoryTest extends TestCase
         $resolvedSocialUser = $repo->getById(50);
     }
 
+    /** @test */
+    public function getByProviderId_tests(){
+
+    }
 }

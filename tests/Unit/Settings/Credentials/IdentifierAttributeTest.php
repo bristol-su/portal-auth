@@ -19,7 +19,8 @@ class IdentifierAttributeTest extends TestCase
     public function rules_returns_the_rules_for_the_identifier(){
         $setting = new IdentifierAttribute();
         $rules = $setting->rules();
-        $this->assertContains('string', $rules);
+        $this->assertArrayHasKey($setting->inputName(), $rules);
+        $this->assertContains('string', $rules[$setting->inputName()]);
     }
 
     /** @test */

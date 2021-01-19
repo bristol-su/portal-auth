@@ -2,24 +2,14 @@
 
 namespace BristolSU\Auth\Social\Http\Middleware;
 
-use BristolSU\Auth\Social\Settings\Providers\Github\GithubClientId;
-use BristolSU\Auth\Social\Settings\Providers\Github\GithubClientSecret;
-use BristolSU\Auth\Social\Settings\Providers\Github\GithubEnabled;
-use Illuminate\Contracts\Config\Repository;
+use BristolSU\Auth\Social\Driver\DriverLoader;
 use Illuminate\Http\Request;
 
 class LoadsSocialite
 {
 
-    protected static array $callbacks = [];
-
-    public function __construct(protected Repository $config)
+    public function __construct(protected DriverLoader $loader)
     {
-    }
-
-    public static function loadDriver(string $driver, \Closure $callback)
-    {
-        static::$callbacks[$driver] = $callback;
     }
 
     /**
@@ -31,10 +21,7 @@ class LoadsSocialite
      */
     public function handle($request, \Closure $next)
     {
-        foreach(static::$callbacks as $callback) {
-            $callback($this->config);
-        }
-
+        $this->loader->loadAllEnabled();
         return $next($request);
     }
 

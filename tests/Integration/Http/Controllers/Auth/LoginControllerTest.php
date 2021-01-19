@@ -48,6 +48,14 @@ class LoginControllerTest extends TestCase
     }
 
     /** @test */
+    public function GETlogin_passes_enabled_social_drivers_through_to_the_login_view(){
+    }
+
+    /** @test */
+    public function GETlogin_passes_an_empty_array_to_the_login_view_if_there_are_no_enabled_social_drivers(){
+    }
+
+    /** @test */
     public function POSTlogin_fails_validation_if_the_identifier_not_given(){
         $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
         $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);

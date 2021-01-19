@@ -2,40 +2,66 @@
 
 namespace BristolSU\Auth\Social\Http\Controllers;
 
+use BristolSU\Auth\Authentication\Contracts\AuthenticationUserResolver;
 use BristolSU\Auth\Http\Controllers\Controller;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Social\Contracts\SocialUserRepository;
+use BristolSU\Auth\Social\Driver\DriverStore;
+use BristolSU\Auth\Social\NameParser;
+use BristolSU\Auth\Work\GetAuthenticationUserUnit;
+use BristolSU\Auth\Work\GetControlUserUnit;
+use BristolSU\Auth\Work\GetDataUserUnit;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialLoginController extends Controller
 {
 
-    public function redirect(Request $request, string $driver)
+    public function redirect(Request $request, string $driver, DriverStore $driverStore)
     {
-        // TODO Check driver is enabled
+        if (!$driverStore->hasDriver($driver)) {
+            $messages[] = ['type' => 'danger', 'message' => sprintf('You cannot log in using %s.', $driver)];
+            session()->flash('messages', $messages);
+            return back(302, [], route('login'));
+        } elseif (!$driverStore->isEnabled($driver)) {
+            $messages[] = ['type' => 'danger', 'message' => sprintf('Log in through %s is currently disabled.', $driver)];
+            session()->flash('messages', $messages);
+            return back(302, [], route('login'));
+        }
 
         return Socialite::driver($driver)->redirect();
     }
 
-    public function callback(Request $request, string $driver, SocialUserRepository $socialUserRepository)
+    public function callback(Request $request,
+                             string $driver,
+                             SocialUserRepository $socialUserRepository,
+                             GetDataUserUnit $getDataUserUnit,
+                             GetControlUserUnit $getControlUserUnit,
+                             GetAuthenticationUserUnit $getAuthenticationUserUnit,
+                             AuthenticationUserResolver $userResolver)
     {
-        $socialUser = Socialite::driver($driver)->user();
+        $socialiteUser = Socialite::driver($driver)->user();
 
-        // Try and get a provider with the right provider_id and provider with repository (getUserThroughProviderId)
-            // If a user cannot be found
-                // GetDataUserUnit, with email as the identifier and pass in as extra params: name, nickname (preferred name)
-                // - We will now have a data user
-                // GetControlUserUnit with data user
-                // GetAuthenticationUserUnit with control user
-                // RegisterSocialUserUnit with authentication user, driver and IDs (create).
-                // Verify authentication user email address
-            // If a user is found, get the authentication user
-        // Now have authentication user.
-        // $userResolver->setUser($user);
-        //         return redirect()->route(DefaultHome::getValueAsRouteName($user->controlId()));
+        try {
+            $socialUser = $socialUserRepository->getByProviderId($driver, $socialiteUser->getId());
+            $authenticationUser = $socialUser->authenticationUser;
+        } catch (ModelNotFoundException $e) {
+            $dataUser = $getDataUserUnit->do($socialiteUser->getEmail(), 'email', [
+                'firstName' => NameParser::parse($socialiteUser->getName())->getFirstName(),
+                'lastName' => NameParser::parse($socialiteUser->getName())->getLastName(),
+                'preferredName' => $socialiteUser->getNickname()
+            ]);
+            $controlUser = $getControlUserUnit->do($dataUser);
+            $authenticationUser = $getAuthenticationUserUnit->do($controlUser);
+            $socialUser = $socialUserRepository->create($authenticationUser->id(), $driver, $socialiteUser->getId(), $socialiteUser->getEmail(), $socialiteUser->getName());
+            $authenticationUser->markEmailAsVerified();
+        }
 
-        dd($socialUser);
+        $userResolver->setUser($authenticationUser);
 
+        return redirect()->route(DefaultHome::getValueAsRouteName($authenticationUser->controlId()));
     }
 
 }
