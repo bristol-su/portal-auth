@@ -45,6 +45,18 @@ class NameParserTest extends TestCase
         $this->assertEquals('Smith', $nameParser->getLastName());
     }
 
+    /** @test */
+    public function firstName_returns_an_empty_string_if_no_name_given(){
+        $nameParser = NameParser::parse('');
+        $this->assertEquals('', $nameParser->getFirstName());
+    }
+
+    /** @test */
+    public function lastName_returns_an_empty_string_if_no_last_name_given(){
+        $nameParser = NameParser::parse('Toby');
+        $this->assertEquals('', $nameParser->getLastName());
+    }
+
     public function nameProvider(): array
     {
         return [
