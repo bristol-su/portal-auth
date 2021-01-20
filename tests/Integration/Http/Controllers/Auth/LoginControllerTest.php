@@ -4,6 +4,7 @@ namespace BristolSU\Auth\Tests\Integration\Http\Controllers\Auth;
 
 use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Auth\Social\Driver\DriverStore;
 use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\ControlDB\Models\DataUser;
@@ -45,6 +46,28 @@ class LoginControllerTest extends TestCase
 
         $response = $this->get('/login');
         $response->assertRedirect();
+    }
+
+    /** @test */
+    public function GETlogin_passes_enabled_social_drivers_through_to_the_login_view(){
+        $driverStore = app(DriverStore::class);
+        $driverStore->register('driver-1', fn() => 'test', true);
+        $driverStore->register('driver-2', fn() => 'test', false);
+        $driverStore->register('driver-3', fn() => 'test', true);
+
+        $response = $this->get('/login');
+        $response->assertViewHas('social', ['driver-1', 'driver-3']);
+    }
+
+    /** @test */
+    public function GETlogin_passes_an_empty_array_to_the_login_view_if_there_are_no_enabled_social_drivers(){
+        $driverStore = app(DriverStore::class);
+        $driverStore->register('driver-1', fn() => 'test', false);
+        $driverStore->register('driver-2', fn() => 'test', false);
+        $driverStore->register('driver-3', fn() => 'test', false);
+
+        $response = $this->get('/login');
+        $response->assertViewHas('social', []);
     }
 
     /** @test */

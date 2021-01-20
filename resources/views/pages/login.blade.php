@@ -4,6 +4,14 @@
 
 @section('content')
 
+    @if(session()->has('messages'))
+        @foreach(session()->get('messages') as $message)
+            <x-portal-alert :variant="$message['type']" :dismissible="true">
+                {{$message['message']}}
+            </x-portal-alert>
+        @endforeach
+    @endif
+
     <x-portal-card
             title="Login">
         <x-slot name="body">
@@ -47,7 +55,19 @@
 
 
             </form>
+
+            @if(count($social) > 0)
+                <hr />
+                @foreach($social as $driver)
+                    <x-portal-link href="{{route('social.login', ['driver' => $driver])}}">
+                        <x-portal-button type="button" variant="secondary">
+                            Login with {{\Illuminate\Support\Str::title($driver)}}
+                        </x-portal-button>
+                    </x-portal-link>
+                @endforeach
+            @endif
         </x-slot>
+
         <x-slot name="actions">
             <x-portal-link href="{{route('register')}}">Register</x-portal-link>
             <x-portal-link href="{{route('password.forgot')}}">Forgot Password</x-portal-link>

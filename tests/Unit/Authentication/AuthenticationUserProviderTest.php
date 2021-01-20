@@ -12,6 +12,7 @@ use BristolSU\ControlDB\Contracts\Repositories\User as UserRepository;
 use BristolSU\ControlDB\Models\DataUser;
 use BristolSU\ControlDB\Models\User;
 use BristolSU\Support\Settings\Saved\SavedSettingModel;
+use BristolSU\Support\Settings\Saved\ValueManipulator\Manipulator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 use Prophecy\Argument;
@@ -154,7 +155,7 @@ class AuthenticationUserProviderTest extends TestCase
         $controlUserRepository->getByDataProviderId($dataUser->id)->shouldBeCalled()->willThrow(new ModelNotFoundException());
         $this->instance(UserRepository::class, $controlUserRepository->reveal());
 
-        SavedSettingModel::create(['key' => IdentifierAttribute::getKey(), 'value' => 'unique_id']);
+        IdentifierAttribute::setValue('unique_id');
 
         $userRepository = $this->prophesize(AuthenticationUserRepository::class);
 
@@ -177,7 +178,7 @@ class AuthenticationUserProviderTest extends TestCase
         $controlUserRepository->getByDataProviderId($dataUser->id)->shouldBeCalled()->willReturn($user);
         $this->instance(UserRepository::class, $controlUserRepository->reveal());
 
-        SavedSettingModel::create(['key' => IdentifierAttribute::getKey(), 'value' => 'unique_id']);
+        IdentifierAttribute::setValue('unique_id');
 
         $userRepository = $this->prophesize(AuthenticationUserRepository::class);
         $userRepository->getFromControlId($user->id)->shouldBeCalled()->willThrow(new ModelNotFoundException());
@@ -202,7 +203,7 @@ class AuthenticationUserProviderTest extends TestCase
         $controlUserRepository->getByDataProviderId($dataUser->id)->shouldBeCalled()->willReturn($user);
         $this->instance(UserRepository::class, $controlUserRepository->reveal());
 
-        SavedSettingModel::create(['key' => IdentifierAttribute::getKey(), 'value' => 'unique_id']);
+        IdentifierAttribute::setValue('unique_id');
 
         $userRepository = $this->prophesize(AuthenticationUserRepository::class);
         $userRepository->getFromControlId($user->id)->shouldBeCalled()->willReturn($authenticationUser);
@@ -228,7 +229,7 @@ class AuthenticationUserProviderTest extends TestCase
         $controlUserRepository->getByDataProviderId($dataUser->id)->shouldBeCalled()->willReturn($user);
         $this->instance(UserRepository::class, $controlUserRepository->reveal());
 
-        SavedSettingModel::create(['key' => IdentifierAttribute::getKey(), 'value' => 'unique_id_two']);
+        IdentifierAttribute::setValue('unique_id_two');
 
         $userRepository = $this->prophesize(AuthenticationUserRepository::class);
         $userRepository->getFromControlId($user->id)->shouldBeCalled()->willReturn($authenticationUser);

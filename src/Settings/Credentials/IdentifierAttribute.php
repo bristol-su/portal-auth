@@ -10,9 +10,9 @@ class IdentifierAttribute extends GlobalSetting
 
     public function rules(): array
     {
-        return [
+        return [$this->inputName() => [
             'string'
-        ];
+        ]];
     }
 
     public function key(): string
