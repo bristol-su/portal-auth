@@ -58,7 +58,12 @@ class DriverStoreSingleton implements DriverStore
 
     public function allEnabled(): array
     {
-        return array_filter($this->drivers, fn($driver): bool => $this->enabled[$driver]);
+        return array_values(
+            array_filter(
+                $this->drivers,
+                fn($driver): bool => $this->isEnabled($driver)
+            )
+        );
     }
 
     public function hasDriver(string $driver): bool

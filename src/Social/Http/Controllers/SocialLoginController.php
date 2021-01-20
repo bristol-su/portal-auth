@@ -49,9 +49,9 @@ class SocialLoginController extends Controller
             $authenticationUser = $socialUser->authenticationUser;
         } catch (ModelNotFoundException $e) {
             $dataUser = $getDataUserUnit->do($socialiteUser->getEmail(), 'email', [
-                'firstName' => NameParser::parse($socialiteUser->getName())->getFirstName(),
-                'lastName' => NameParser::parse($socialiteUser->getName())->getLastName(),
-                'preferredName' => $socialiteUser->getNickname()
+                'first_name' => NameParser::parse($socialiteUser->getName())->getFirstName(),
+                'last_name' => NameParser::parse($socialiteUser->getName())->getLastName(),
+                'preferred_name' => $socialiteUser->getNickname()
             ]);
             $controlUser = $getControlUserUnit->do($dataUser);
             $authenticationUser = $getAuthenticationUserUnit->do($controlUser);

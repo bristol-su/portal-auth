@@ -35,7 +35,8 @@ abstract class BaseProviderClientIdSetting extends GlobalSetting
     {
         return \FormSchema\Generator\Field::input($this->inputName())
             ->inputType('password')
-            ->label('Client ID');
+            ->label('Client ID')
+            ->getSchema();
     }
 
     abstract public function driver(): string;

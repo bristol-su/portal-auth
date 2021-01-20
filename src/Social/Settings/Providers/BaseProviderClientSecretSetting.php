@@ -18,12 +18,15 @@ abstract class BaseProviderClientSecretSetting extends GlobalSetting
             'string',
             'min:3',
             'max:400'
-        ]];    }
+        ]];
+    }
 
     public function key(): string
     {
         return sprintf('social-drivers.%s.client_secret', Str::lower($this->driver()));
     }
+
+    abstract public function driver(): string;
 
     public function defaultValue()
     {
@@ -34,8 +37,7 @@ abstract class BaseProviderClientSecretSetting extends GlobalSetting
     {
         return \FormSchema\Generator\Field::input($this->inputName())
             ->inputType('password')
-            ->label('Client Secret');
+            ->label('Client Secret')
+            ->getSchema();
     }
-
-    abstract public function driver(): string;
 }

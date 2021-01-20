@@ -15,13 +15,20 @@ abstract class BaseSocialDriversGroup extends Group
 
     public function name(): string
     {
-        return sprintf('%s Driver', Str::title($this->driver()));
+        return sprintf('%s Driver', $this->formatAsTitle($this->driver()));
     }
 
     public function description(): string
     {
-        return sprintf('Set up the authentication integration with %s.', Str::title($this->driver()));
+        return sprintf('Set up the authentication integration with %s.', $this->formatAsTitle($this->driver()));
     }
 
     abstract public function driver(): string;
+
+    protected function formatAsTitle(string $driver)
+    {
+        return Str::title(
+            str_replace(['-', '_'], ' ', $driver)
+        );
+    }
 }
