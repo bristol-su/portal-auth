@@ -24,7 +24,8 @@
         "bristol-su/support": "dev-portal-v4",
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "laravel/socialite": "^5.1"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
@@ -37,7 +38,8 @@
         "psr-4": {
             "BristolSU\\Auth\\": "src/",
             "Database\\Auth\\Factories\\": "database/factories/",
-            "Database\\Auth\\Seeders\\": "database/seeders/"
+            "Database\\Auth\\Seeders\\": "database/seeders/",
+            "Database\\Auth\\Migrations\\": "database/migrations/"
         }
     },
     "autoload-dev": {

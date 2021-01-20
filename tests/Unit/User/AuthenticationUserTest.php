@@ -2,9 +2,11 @@
 
 namespace BristolSU\Auth\Tests\Unit\User;
 
+use BristolSU\Auth\Social\SocialUser;
 use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\ControlDB\Models\DataUser;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 class AuthenticationUserTest extends TestCase
@@ -120,6 +122,45 @@ class AuthenticationUserTest extends TestCase
         $user = AuthenticationUser::factory()->create();
 
         $this->assertEquals($user->id, $user->id());
+    }
+
+    /** @test */
+    public function social_user_returns_all_social_users_belonging_to_the_user(){
+        $user = AuthenticationUser::factory()->create();
+        $socialUsers = SocialUser::factory()->count(5)->create([
+            'authentication_user_id' => $user->id()
+        ]);
+        SocialUser::factory()->count(5)->create();
+
+        $resolvedUsers = $user->socialUser;
+        $this->assertCount(5, $resolvedUsers);
+        foreach($resolvedUsers as $user) {
+            $this->assertInstanceOf(SocialUser::class, $user);
+        }
+    }
+
+    /** @test */
+    public function social_user_returns_one_social_user_if_only_one_is_assigned(){
+        $user = AuthenticationUser::factory()->create();
+        $socialUser = SocialUser::factory()->create([
+            'authentication_user_id' => $user->id()
+        ]);
+        SocialUser::factory()->count(5)->create();
+
+        $resolvedUsers = $user->socialUser;
+        $this->assertCount(1, $resolvedUsers);
+        $this->assertInstanceOf(SocialUser::class, $resolvedUsers->first());
+
+    }
+
+    /** @test */
+    public function social_user_returns_an_empty_collection_if_no_social_users_belong_to_the_user(){
+        $user = AuthenticationUser::factory()->create();
+        SocialUser::factory()->count(5)->create();
+
+        $resolvedUsers = $user->socialUser;
+        $this->assertInstanceOf(Collection::class, $resolvedUsers);
+        $this->assertCount(0, $resolvedUsers);
     }
 
 }

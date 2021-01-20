@@ -2,6 +2,7 @@
 
 namespace BristolSU\Auth\User;
 
+use BristolSU\Auth\Social\SocialUser;
 use BristolSU\ControlDB\Contracts\Repositories\DataUser;
 use Database\Auth\Factories\AuthenticationUserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
@@ -125,6 +126,11 @@ class AuthenticationUser extends Authenticatable implements MustVerifyEmailContr
         }
 
         return static::newQuery()->where('control_id', $controlUser->id())->first();
+    }
+
+    public function socialUser()
+    {
+        return $this->hasMany(SocialUser::class);
     }
 
     protected static function newFactory(): AuthenticationUserFactory
