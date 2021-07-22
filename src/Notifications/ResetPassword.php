@@ -44,7 +44,7 @@ class ResetPassword extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject(Lang::get('Reset Password'))
             ->line(Lang::get('Please click the button below to reset your password.'))
-            ->action(Lang::get('Verify Email Address'), $verificationUrl)
+            ->action(Lang::get('Reset Password'), $verificationUrl)
             ->line(Lang::get('If you did not ask to reset your password, you should go ahead and change it.'))
             ->line(Lang::get('Please do not forward or share this email to anyone.'));
     }

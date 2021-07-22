@@ -39,7 +39,7 @@ class ForgotPasswordController extends Controller
         event(new PasswordResetRequestGenerated($user));
 
         $messages = session()->get('messages', []);
-        $messages[] = ['type' => 'success', 'message' => 'We\'ve sent a password reset email to test@example.com'];
+        $messages[] = ['type' => 'success', 'message' => sprintf('We\'ve sent a password reset email to %s', $dataUser->email())];
         session()->flash('messages', $messages);
 
         return redirect()->route('password.forgot');

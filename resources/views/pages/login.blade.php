@@ -4,15 +4,7 @@
 
 @section('content')
 
-
-
-
-
-
     <div class="container">
-
-
-
 
         @if(session()->has('messages'))
             @foreach(session()->get('messages') as $message)
@@ -40,22 +32,6 @@
 
                                         <form method="POST" action="{{ route('login.action') }}">
                                             @csrf
-
-
-                                            <x-portal-text
-                                                    id="identifier"
-                                                    name="identifier"
-                                                    :label="\Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue())"
-                                                    help="Enter the {{\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()}} you used to register."
-                                                    sr-label="Enter the {{\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()}} you used to register."
-                                                    :errors="$errors->get('identifier')"
-                                                    :validated="$errors->has('identifier')"
-                                                    :required="true"
-                                                    :value="old('identifier')"
-                                            >
-
-                                            </x-portal-text>
-
 
                                             <div class="form-group row">
                                                 <label for="identifier"
@@ -164,27 +140,5 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-    <x-portal-card
-            title="Login">
-        <x-slot name="body">
-
-
-        </x-slot>
-
-        <x-slot name="actions">
-            <x-portal-link href="{{route('register')}}">Register</x-portal-link>
-            <x-portal-link href="{{route('password.forgot')}}">Forgot Password</x-portal-link>
-        </x-slot>
-
-    </x-portal-card>
 
 @endsection

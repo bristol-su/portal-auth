@@ -9,6 +9,7 @@ use BristolSU\Auth\Http\Requests\Auth\RegisterRequest;
 use BristolSU\Auth\Settings\Access\RegistrationEnabled;
 use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
+use BristolSU\Auth\Social\Driver\DriverStore;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\Auth\Work\GetAuthenticationUserUnit;
 use BristolSU\Auth\Work\GetControlUserUnit;
@@ -32,10 +33,12 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
      */
-    public function showRegistrationForm()
+    public function showRegistrationForm(DriverStore $driverStore)
     {
         if(RegistrationEnabled::getValue()) {
-            return view('portal-auth::pages.register');
+            return view('portal-auth::pages.register', [
+                'social' => $driverStore->allEnabled()
+            ]);
         }
         return view('portal-auth::errors.registration_disabled');
     }
