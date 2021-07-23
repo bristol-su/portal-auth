@@ -8,7 +8,6 @@ use BristolSU\ControlDB\ControlDBServiceProvider;
 use BristolSU\Support\SupportServiceProvider;
 use BristolSU\Support\Testing\AssertsEloquentModels;
 use BristolSU\Support\Testing\HandlesAuthentication;
-use BristolSU\Support\Theme\ThemeServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\MessageBag;
@@ -50,7 +49,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->addTestResponseMacros();
 
-        ThemeServiceProvider::useTheme('bootstrap');
     }
 
     protected function getPackageProviders($app)

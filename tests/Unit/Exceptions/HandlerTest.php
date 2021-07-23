@@ -6,8 +6,11 @@ namespace BristolSU\Auth\Tests\Unit\Exceptions;
 
 use BristolSU\Auth\Exceptions\EmailNotVerified;
 use BristolSU\Auth\Exceptions\Handler;
-use BristolSU\Auth\Exceptions\PasswordUnconfirmed;
+use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Tests\TestCase;
+use BristolSU\Support\Authentication\Contracts\Authentication;
+use BristolSU\Support\Authentication\Exception\IsAuthenticatedException;
+use BristolSU\Support\Authentication\Exception\PasswordUnconfirmed;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -34,6 +37,65 @@ class HandlerTest extends TestCase
         $response = $handler->render($request->reveal(), $exception);
 
         $this->assertTrue($response->isRedirect('http://localhost/verify'));
+    }
+
+    /** @test */
+    public function it_handles_a_web_request_throwing_an_IsAuthenticatedException_exception(){
+        $handler = $this->prophesize(ExceptionHandler::class);
+        $handler = new Handler($handler->reveal());
+
+        $user = $this->newUser();
+        $auth = $this->prophesize(Authentication::class);
+        $auth->hasUser()->willReturn(true);
+        $auth->getUser()->willReturn($user);
+        $this->app->instance(Authentication::class, $auth->reveal());
+
+        Route::name('default-home')->get('default-home-url', fn() => response('Test', 200));
+        DefaultHome::setDefault('default-home');
+
+        $request = $this->prophesize(Request::class);
+
+        $exception = new IsAuthenticatedException();
+        $response = $handler->render($request->reveal(), $exception);
+
+        $this->assertTrue($response->isRedirect('http://localhost/default-home-url'),
+        sprintf('Redirect was to %s, not http://localhost/default-home-url', $response->getTargetUrl()));
+    }
+
+    /** @test */
+    public function it_handles_a_web_request_throwing_an_IsAuthenticatedException_exception_when_a_user_is_not_logged_in(){
+        $handler = $this->prophesize(ExceptionHandler::class);
+        $handler = new Handler($handler->reveal());
+
+        $auth = $this->prophesize(Authentication::class);
+        $auth->hasUser()->willReturn(false);
+        $this->app->instance(Authentication::class, $auth->reveal());
+
+        Route::name('default-home')->get('default-home-url', fn() => response('Test', 200));
+        DefaultHome::setDefault('default-home');
+
+        $request = $this->prophesize(Request::class);
+
+        $exception = new IsAuthenticatedException();
+        $response = $handler->render($request->reveal(), $exception);
+
+        $this->assertTrue($response->isRedirect('http://localhost/login'),
+            sprintf('Redirect was to %s, not http://localhost/login', $response->getTargetUrl()));
+
+    }
+
+    /** @test */
+    public function it_handles_a_json_request_throwing_an_IsAuthenticatedException_exception(){
+        $handler = $this->prophesize(ExceptionHandler::class);
+        $handler = new Handler($handler->reveal());
+
+        $request = $this->prophesize(Request::class);
+        $request->expectsJson()->willReturn(true);
+
+        $exception = new IsAuthenticatedException();
+        $response = $handler->render($request->reveal(), $exception);
+
+        $this->assertEquals('"You must not be logged in to access this page."', $response->getContent());
     }
 
     /** @test */

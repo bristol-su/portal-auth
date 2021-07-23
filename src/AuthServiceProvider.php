@@ -124,12 +124,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
-        $this->app['router']->aliasMiddleware('portal-verified', HasVerifiedEmail::class);
-        $this->app['router']->aliasMiddleware('portal-guest', IsGuest::class);
-        $this->app['router']->aliasMiddleware('portal-confirmed', HasConfirmedPassword::class);
-        $this->app['router']->aliasMiddleware('portal-throttle', ThrottleRequests::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-auth', HasVerifiedEmail::class);
         $this->app['router']->aliasMiddleware('portal-not-verified', HasNotVerifiedEmail::class);
         $this->app['router']->aliasMiddleware('socialite', LoadsSocialite::class);
 
@@ -149,7 +144,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerSettings()
             ->category(new AuthCategory())
             ->group(new SecurityGroup())
-            ->registerSetting(new PasswordConfirmationTimeout())
             ->registerSetting(new ShouldVerifyEmail());
 
         $this->registerSettings()
@@ -206,7 +200,7 @@ class AuthServiceProvider extends ServiceProvider
         } catch (QueryException $e) {
             // Drivers couldn't be loaded as settings table hasn't yet been migrated.
         } catch (MissingAppKeyException $e) {
-            // The application key hasn't been generated yet   
+            // The application key hasn't been generated yet
         }
     }
 

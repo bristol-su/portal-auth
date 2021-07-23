@@ -34,7 +34,8 @@ Route::middleware('portal-guest')->group(function() {
 
 });
 
-Route::middleware('portal-auth')->group(function() {
+// Without verification
+Route::middleware([\BristolSU\Support\Authentication\Middleware\IsAuthenticated::class])->group(function() {
 
     Route::name('logout')->post('logout', [LogoutController::class, 'logout']);
 
@@ -44,10 +45,9 @@ Route::middleware('portal-auth')->group(function() {
         Route::middleware('link')->get('verify/authorize', [VerifyEmailController::class, 'verify'])->name('verify');
         Route::middleware('portal-throttle:3')->post('verify/resend', [VerifyEmailController::class, 'resend'])->name('verify.resend');
     });
+});
 
-    Route::middleware(['portal-verified'])->group(function() {
-        Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmationPage'])->name('password.confirmation.notice');
-        Route::middleware('portal-throttle:5,1')->post('password/confirm', [ConfirmPasswordController::class, 'confirm'])->name('password.confirmation');
-    });
-
+Route::middleware(['portal-auth'])->group(function() {
+    Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmationPage'])->name('password.confirmation.notice');
+    Route::middleware('portal-throttle:5,1')->post('password/confirm', [ConfirmPasswordController::class, 'confirm'])->name('password.confirmation');
 });
