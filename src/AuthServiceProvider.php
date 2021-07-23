@@ -60,6 +60,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Socialite\SocialiteServiceProvider;
 use Illuminate\Database\QueryException;
+use Illuminate\Encryption\MissingAppKeyException;
 
 /**
  * Database user service provider
@@ -204,10 +205,9 @@ class AuthServiceProvider extends ServiceProvider
             }, GithubEnabled::getValue());
         } catch (QueryException $e) {
             // Drivers couldn't be loaded as settings table hasn't yet been migrated.
+        } catch (MissingAppKeyException $e) {
+            // The application key hasn't been generated yet   
         }
-
-
-
     }
 
     /**
