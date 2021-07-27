@@ -25,7 +25,8 @@
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
         "ext-json": "*",
-        "laravel/socialite": "^5.1"
+        "laravel/socialite": "^5.1",
+        "laravel/passport": "^10.1"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
