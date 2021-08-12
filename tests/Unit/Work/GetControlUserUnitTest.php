@@ -21,7 +21,7 @@ class GetControlUserUnitTest extends TestCase
         ControlUserRegistrationEnabled::setValue(false);
         ControlUserRegistrationNotAllowedMessage::setValue('Test message - registration not allowed');
 
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
         $controlUser = $this->newUser(['data_provider_id' => $dataUser->id()]);
 
         $controlUserRepository = $this->prophesize(ControlUserRepository::class);
@@ -53,7 +53,7 @@ class GetControlUserUnitTest extends TestCase
     public function it_returns_the_registerUnit_result_if_the_control_user_is_not_found_but_registration_is_enabled(){
         ControlUserRegistrationEnabled::setValue(true);
 
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
         $controlUser = $this->newUser(['data_provider_id' => $dataUser->id()]);
 
         $controlUserRepository = $this->prophesize(ControlUserRepository::class);
@@ -72,7 +72,7 @@ class GetControlUserUnitTest extends TestCase
 
     /** @test */
     public function it_returns_the_control_user_if_it_already_exists(){
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
         $controlUser = $this->newUser(['data_provider_id' => $dataUser->id()]);
 
         $controlUserRepository = $this->prophesize(ControlUserRepository::class);

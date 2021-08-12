@@ -24,8 +24,8 @@ class HasNotVerifiedEmailTest extends TestCase
         Route::name('portal1')->get('portal1', fn() => response('Test', 200));
         DefaultHome::setDefault('portal1');
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => Carbon::now()]);
 
         $userResolver = $this->prophesize(AuthenticationUserResolver::class);
@@ -48,8 +48,8 @@ class HasNotVerifiedEmailTest extends TestCase
         Route::name('portal1')->get('portal1', fn() => response('Test', 200));
         DefaultHome::setDefault('portal1');
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
 
         $userResolver = $this->prophesize(AuthenticationUserResolver::class);

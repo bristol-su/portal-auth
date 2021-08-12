@@ -39,8 +39,8 @@ class ForgotPasswordControllerTest extends TestCase
 
     /** @test */
     public function sendResetLink_redirects_to_the_homepage_if_a_user_is_logged_in(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
         app(AuthenticationUserResolver::class)->setUser($user);
 
@@ -90,7 +90,7 @@ class ForgotPasswordControllerTest extends TestCase
 
     /** @test */
     public function sendResetLink_fails_validation_if_the_control_user_for_the_data_user_does_not_exist(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
 
         $response = $this->from('password/forgot')->post('/password/forgot', [
             'identifier' => 'example@portal.com'
@@ -103,8 +103,8 @@ class ForgotPasswordControllerTest extends TestCase
 
     /** @test */
     public function sendResetLink_fails_validation_if_the_authentication_user_for_the_control_user_does_not_exist(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
 
         $response = $this->from('password/forgot')->post('/password/forgot', [
             'identifier' => 'example@portal.com'
@@ -118,8 +118,8 @@ class ForgotPasswordControllerTest extends TestCase
     /** @test */
     public function sendResetLink_fires_an_event_with_the_correct_user(){
         Event::fake();
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         $response = $this->post('/password/forgot', [
@@ -134,8 +134,8 @@ class ForgotPasswordControllerTest extends TestCase
 
     /** @test */
     public function sendResetLink_redirects_to_showForm(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         $response = $this->post('/password/forgot', [
@@ -146,8 +146,8 @@ class ForgotPasswordControllerTest extends TestCase
 
     /** @test */
     public function sendResetLink_saves_a_message_to_the_session(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
 
         $response = $this->from('login-1')->post('/password/forgot', [

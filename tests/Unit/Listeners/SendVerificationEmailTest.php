@@ -23,8 +23,8 @@ class SendVerificationEmailTest extends TestCase
             Argument::type(VerifyEmail::class),
         )->shouldBeCalled();
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'something@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'something@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
 
         $event = new UserVerificationRequestGenerated($user);
@@ -41,7 +41,7 @@ class SendVerificationEmailTest extends TestCase
             Argument::type(VerifyEmail::class),
         )->shouldNotBeCalled();
 
-        $dataUser = factory(DataUser::class)->create(['email' => null]);
+        $dataUser = DataUser::factory()->create(['email' => null]);
         $controlUser = $this->newUser(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser]);
 
@@ -59,7 +59,7 @@ class SendVerificationEmailTest extends TestCase
             Argument::type(VerifyEmail::class),
         )->shouldNotBeCalled();
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@test.com']);
+        $dataUser = DataUser::factory()->create(['email' => 'example@test.com']);
         $controlUser = $this->newUser(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser]);
 

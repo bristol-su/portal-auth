@@ -15,8 +15,8 @@ class VerifyEmailTest extends TestCase
 
     /** @test */
     public function via_returns_mail_if_the_user_has_an_email_address(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'abc123@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'abc123@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $notification = new VerifyEmail();
@@ -28,8 +28,8 @@ class VerifyEmailTest extends TestCase
 
     /** @test */
     public function via_returns_an_empty_array_if_the_user_does_not_have_an_email_address(){
-        $dataUser = factory(DataUser::class)->create(['email' => null]);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => null]);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $notification = new VerifyEmail();
@@ -39,8 +39,8 @@ class VerifyEmailTest extends TestCase
 
     /** @test */
     public function toMail_returns_a_complete_mail_message(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $notification = new VerifyEmail();
@@ -52,8 +52,8 @@ class VerifyEmailTest extends TestCase
 
     /** @test */
     public function toMail_creates_a_valid_verification_link(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $notification = new VerifyEmail();

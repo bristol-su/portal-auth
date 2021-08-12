@@ -17,9 +17,7 @@ class AuthenticationUserFactory extends Factory
         return [
             'email_verified_at' => now(),
             'password' => Hash::make('secret'),
-            'control_id' => function () {
-                return factory(User::class)->create()->id();
-            },
+            'control_id' => fn() =>  User::factory()->create()->id(),
         ];
     }
 }

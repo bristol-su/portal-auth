@@ -23,8 +23,8 @@ class SendResetPasswordEmailTest extends TestCase
     public function it_triggers_when_the_verification_event_is_dispatched(){
         Queue::fake();
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));

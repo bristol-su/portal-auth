@@ -145,7 +145,7 @@ class AuthenticationUserProviderTest extends TestCase
 
     /** @test */
     public function it_returns_null_if_the_control_user_is_not_found(){
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['unique_id' => 'abc123'])->shouldBeCalled()->willReturn($dataUser);
@@ -167,8 +167,8 @@ class AuthenticationUserProviderTest extends TestCase
 
     /** @test */
     public function it_returns_null_if_the_authentication_user_is_not_found(){
-        $dataUser = factory(DataUser::class)->create();
-        $user = factory(User::class)->create(['data_provider_id' => $dataUser]);
+        $dataUser = DataUser::factory()->create();
+        $user = User::factory()->create(['data_provider_id' => $dataUser]);
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['unique_id' => 'abc123'])->shouldBeCalled()->willReturn($dataUser);
@@ -191,8 +191,8 @@ class AuthenticationUserProviderTest extends TestCase
 
     /** @test */
     public function it_returns_the_authentication_user(){
-        $dataUser = factory(DataUser::class)->create();
-        $user = factory(User::class)->create(['data_provider_id' => $dataUser]);
+        $dataUser = DataUser::factory()->create();
+        $user = User::factory()->create(['data_provider_id' => $dataUser]);
         $authenticationUser = AuthenticationUser::factory()->create();
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
@@ -217,8 +217,8 @@ class AuthenticationUserProviderTest extends TestCase
 
     /** @test */
     public function a_different_identifier_works(){
-        $dataUser = factory(DataUser::class)->create();
-        $user = factory(User::class)->create(['data_provider_id' => $dataUser]);
+        $dataUser = DataUser::factory()->create();
+        $user = User::factory()->create(['data_provider_id' => $dataUser]);
         $authenticationUser = AuthenticationUser::factory()->create();
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);

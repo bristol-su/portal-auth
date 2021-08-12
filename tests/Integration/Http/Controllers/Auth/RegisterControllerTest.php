@@ -176,7 +176,7 @@ class RegisterControllerTest extends TestCase
         Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
-        $user = factory(DataUser::class)->create(['email' => 'example@portal.com']);
+        $user = DataUser::factory()->create(['email' => 'example@portal.com']);
 
         ControlUserRegistrationEnabled::setValue(false);
         ControlUserRegistrationNotAllowedMessage::setValue('This is a test message setting. Control user registration disabled.');
@@ -199,8 +199,8 @@ class RegisterControllerTest extends TestCase
         Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
         DefaultHome::setDefault('abc123-test');
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $control = factory(User::class)->create(['data_provider_id' => $dataUser->id]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $control = User::factory()->create(['data_provider_id' => $dataUser->id]);
         $user = AuthenticationUser::factory()->create(['control_id' => $control->id()]);
 
         AlreadyRegisteredMessage::setValue('This is a test message setting. Already registered.');

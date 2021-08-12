@@ -51,7 +51,7 @@ class GetDataUserUnitTest extends TestCase
     public function it_returns_the_registerUnit_result_if_the_data_user_was_not_found_but_registration_is_enabled(){
         DataUserRegistrationEnabled::setValue(true);
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['email' => 'test@example.com'])->shouldBeCalled()->willThrow(new ModelNotFoundException());
@@ -71,7 +71,7 @@ class GetDataUserUnitTest extends TestCase
     public function it_passes_the_identifier_and_extra_params_to_the_registerUnit_result_if_the_data_user_was_not_found_but_registration_is_enabled(){
         DataUserRegistrationEnabled::setValue(true);
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['email' => 'test@example.com'])->shouldBeCalled()->willThrow(new ModelNotFoundException());
@@ -92,7 +92,7 @@ class GetDataUserUnitTest extends TestCase
         DataUserRegistrationEnabled::setValue(true);
         IdentifierAttribute::setValue('this-is-a-test');
 
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['this-is-a-test' => 'and-a-value'])->shouldBeCalled()->willThrow(new ModelNotFoundException());
@@ -113,7 +113,7 @@ class GetDataUserUnitTest extends TestCase
         DataUserRegistrationEnabled::setValue(true);
         IdentifierAttribute::setValue('this-is-a-test-from-the-settings');
 
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['this-is-a-test' => 'and-a-value'])->shouldBeCalled()->willThrow(new ModelNotFoundException());
@@ -131,7 +131,7 @@ class GetDataUserUnitTest extends TestCase
 
     /** @test */
     public function it_returns_the_data_user_if_found_by_the_repository(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
 
         $dataUserRepository = $this->prophesize(DataUserRepository::class);
         $dataUserRepository->getWhere(['email' => 'test@example.com'])->shouldBeCalled()->willReturn($dataUser);
