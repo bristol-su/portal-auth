@@ -30,8 +30,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
         $this->loadMigrationsFrom(realpath(__DIR__.'/../database/migrations'));
-        $this->withFactories(__DIR__.'/../database/factories');
-
     }
 
     public function getEnvironmentSetUp($app)
