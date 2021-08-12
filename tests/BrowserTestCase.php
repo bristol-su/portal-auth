@@ -35,7 +35,6 @@ class BrowserTestCase extends TestCase
     {
         parent::setUp();
         $this->loadMigrationsFrom(realpath(__DIR__.'/../vendor/bristol-su/support/database/migrations'));
-        $this->withFactories(__DIR__.'/../vendor/bristol-su/support/database/factories');
     }
 
     /**

@@ -17,9 +17,7 @@ class SocialUserFactory extends Factory
         return [
             'provider' => $this->faker->randomElement(['github', 'facebook', 'twitter']),
             'provider_id' => Str::random(15),
-            'authentication_user_id' => function () {
-                return AuthenticationUser::factory()->create()->id();
-            },
+            'authentication_user_id' => fn() => AuthenticationUser::factory()->create()->id(),
             'email' => $this->faker->email,
             'name' => $this->faker->name
         ];

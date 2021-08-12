@@ -72,8 +72,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_fails_validation_if_the_identifier_not_given(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
@@ -92,8 +92,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_fails_validation_if_the_password_not_given(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
@@ -112,8 +112,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_sends_a_failed_response_if_the_password_is_wrong(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
@@ -134,8 +134,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_logs_the_user_in_if_password_is_correct(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal', fn() => response('Test', 200));
@@ -152,8 +152,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_sends_a_redirect_response_to_the_default_home_setting_if_password_is_correct(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
@@ -170,8 +170,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_sends_a_redirect_response_to_the_intended_route_if_password_is_correct(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
@@ -189,8 +189,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_fails_validation_if_too_many_requests_in_a_given_period(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));
@@ -232,8 +232,8 @@ class LoginControllerTest extends TestCase
 
     /** @test */
     public function POSTlogin_allows_logging_in_after_60_seconds(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@portal.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@portal.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'password' => Hash::make('secret123')]);
 
         Route::name('abc123-test')->get('portal1', fn() => response('Test', 200));

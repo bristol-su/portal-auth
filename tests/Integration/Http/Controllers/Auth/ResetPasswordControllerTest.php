@@ -68,8 +68,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function showForm_passes_the_correct_email(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => Carbon::now()]);
 
         $response = $this->get($this->getUrl($user));
@@ -78,8 +78,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function showForm_passes_a_reset_link_url_that_allows_resetPassword_to_be_called(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['id' => 1002, 'control_id' => $controlUser->id(), 'email_verified_at' => Carbon::now()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
@@ -181,8 +181,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_passes_validation_if_the_password_is_equal_to_6_characters(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
@@ -199,8 +199,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_passes_validation_if_the_password_is_greater_than_to_6_characters(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
@@ -217,8 +217,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_is_throttled_to_3_a_minute(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
@@ -241,8 +241,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_changes_the_password_of_the_user(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
         $user->password = Hash::make('original');
         $user->save();
@@ -266,8 +266,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_logs_the_user_in(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
@@ -284,8 +284,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_logs_the_user_in_using_authentication(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $userAuthentication = $this->prophesize(AuthenticationUserResolver::class);
@@ -310,8 +310,8 @@ class ResetPasswordControllerTest extends TestCase
     public function resetPassword_fires_a_PasswordHasBeenReset_event(){
         Event::fake(PasswordHasBeenReset::class);
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));
@@ -333,8 +333,8 @@ class ResetPasswordControllerTest extends TestCase
 
     /** @test */
     public function resetPassword_returns_to_the_default_home_for_the_user(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         Route::name('abc123-test')->get('portal-new', fn() => response('Test', 200));

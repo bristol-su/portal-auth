@@ -20,19 +20,18 @@
     "require": {
         "php": "^8.0",
         "laravel/framework": "^8.0",
-        "bristol-su/control": "dev-develop",
-        "bristol-su/support": "dev-portal-v4",
+        "bristol-su/support": "^5.0.0",
         "doctrine/dbal": "^2.10",
         "linkeys/signed-url": "^3.0",
         "ext-json": "*",
-        "laravel/socialite": "^5.1"
+        "laravel/socialite": "^5.1",
+        "laravel/passport": "^10.1"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
         "phpstan/phpstan": "^0.12.3",
         "brianium/paratest": "^6.0",
         "phpspec/prophecy-phpunit": "^2.0.1",
-        "laravel/legacy-factories": "^1.1",
         "orchestra/testbench-dusk": "^6.9"
     },
     "autoload": {

@@ -13,7 +13,7 @@ class RegisterControlUserUnitTest extends TestCase
 
     /** @test */
     public function it_creates_and_returns_a_control_user_with_the_right_user_id(){
-        $dataUser = factory(DataUser::class)->create();
+        $dataUser = DataUser::factory()->create();
         $controlUser = $this->newUser(['data_provider_id' => $dataUser->id()]);
 
         $controlUserRepository = $this->prophesize(ControlUserRepository::class);

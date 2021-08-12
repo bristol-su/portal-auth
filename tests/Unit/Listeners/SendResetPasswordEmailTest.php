@@ -34,8 +34,8 @@ class SendResetPasswordEmailTest extends TestCase
             Argument::type(ResetPasswordNotification::class),
         )->shouldBeCalled();
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'something@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'something@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
 
         $event = new PasswordResetRequestGenerated($user);
@@ -52,8 +52,8 @@ class SendResetPasswordEmailTest extends TestCase
             Argument::any()
         )->shouldNotBeCalled();
 
-        $dataUser = factory(DataUser::class)->create(['email' => null]);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => null]);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
 
         $event = new PasswordResetRequestGenerated($user);

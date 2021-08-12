@@ -58,8 +58,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Http\Middleware\CreateFreshApiToken;
+use Laravel\Passport\Passport;
+use Laravel\Passport\PassportServiceProvider;
 use Laravel\Socialite\SocialiteServiceProvider;
 use Illuminate\Database\QueryException;
+use Illuminate\Encryption\MissingAppKeyException;
 
 /**
  * Database user service provider
@@ -74,6 +78,7 @@ class AuthServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(SocialiteServiceProvider::class);
+        $this->app->register(PassportServiceProvider::class);
 
         $this->app->bind(AuthenticationUserRepositoryContract::class, AuthenticationUserRepository::class);
         $this->app->bind(SocialUserRepositoryContract::class, SocialUserRepository::class);
@@ -122,16 +127,12 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Passport::withoutCookieSerialization();
 
-        $this->app['router']->pushMiddlewareToGroup('portal-auth', IsAuthenticated::class);
-        $this->app['router']->pushMiddlewareToGroup('portal-auth', CheckAdditionalCredentialsOwnedByUser::class);
-        $this->app['router']->aliasMiddleware('portal-verified', HasVerifiedEmail::class);
-        $this->app['router']->aliasMiddleware('portal-guest', IsGuest::class);
-        $this->app['router']->aliasMiddleware('portal-confirmed', HasConfirmedPassword::class);
-        $this->app['router']->aliasMiddleware('portal-throttle', ThrottleRequests::class);
+        $this->app['router']->pushMiddlewareToGroup('portal-auth', HasVerifiedEmail::class);
         $this->app['router']->aliasMiddleware('portal-not-verified', HasNotVerifiedEmail::class);
         $this->app['router']->aliasMiddleware('socialite', LoadsSocialite::class);
-
+        $this->app['router']->pushMiddlewareToGroup('web', CreateFreshApiToken::class);
         $this->registerSettings()
             ->category(new AuthCategory())
             ->group(new CredentialsGroup())
@@ -148,7 +149,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerSettings()
             ->category(new AuthCategory())
             ->group(new SecurityGroup())
-            ->registerSetting(new PasswordConfirmationTimeout())
             ->registerSetting(new ShouldVerifyEmail());
 
         $this->registerSettings()
@@ -204,10 +204,9 @@ class AuthServiceProvider extends ServiceProvider
             }, GithubEnabled::getValue());
         } catch (QueryException $e) {
             // Drivers couldn't be loaded as settings table hasn't yet been migrated.
+        } catch (MissingAppKeyException $e) {
+            // The application key hasn't been generated yet
         }
-
-
-
     }
 
     /**
@@ -217,6 +216,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         Route::middleware(config('portal-auth.middleware.web'))->group(__DIR__ . '/../routes/web.php');
         Route::middleware(config('portal-auth.middleware.api'))->group(__DIR__ . '/../routes/api.php');
+        Route::prefix('oauth')->group(__DIR__ . '/../routes/passport.php');
     }
 
     public function overrideAuthConfig(Repository $config)
@@ -225,7 +225,7 @@ class AuthServiceProvider extends ServiceProvider
         $config->set('auth.defaults.passwords', 'users');
 
         $config->set('auth.guards.web.driver', 'session');
-        $config->set('auth.guards.api.driver', 'token');
+        $config->set('auth.guards.api.driver', 'passport');
         $config->set('auth.guards.web.provider', 'database-users');
         $config->set('auth.guards.api.provider', 'database-users');
 

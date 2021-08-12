@@ -3,10 +3,12 @@
 
 namespace BristolSU\Auth\Exceptions;
 
-use Illuminate\Contracts\Container\Container;
+use BristolSU\Auth\Settings\Access\DefaultHome;
+use BristolSU\Support\Authentication\Contracts\Authentication;
+use BristolSU\Support\Authentication\Exception\IsAuthenticatedException;
+use BristolSU\Support\Authentication\Exception\PasswordUnconfirmed;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 use Linkeys\UrlSigner\Exceptions\LinkNotFoundException;
 use Throwable;
 
@@ -53,6 +55,13 @@ class Handler implements ExceptionHandler
                 redirect()->setIntendedUrl($request->path());
                 return redirect()->route('password.confirmation.notice');
             }
+            if($exception instanceof IsAuthenticatedException) {
+                $auth = app(Authentication::class);
+                if(!$auth->hasUser()) {
+                    return redirect()->route('login');
+                }
+                return redirect()->route(DefaultHome::getValueAsRouteName($auth->getUser()->id()));
+            }
         } else {
             if ($exception instanceof EmailNotVerified) {
                 return response()->json('You must verify your email address.', 403);
@@ -63,13 +72,16 @@ class Handler implements ExceptionHandler
             if ($exception instanceof LinkNotFoundException) {
                 return response()->json('This link has expired.', 403);
             }
+            if($exception instanceof IsAuthenticatedException) {
+                return response()->json('You must not be logged in to access this page.');
+            }
         }
         return $this->handler->render($request, $exception);
     }
 
     public function report(Throwable $e)
     {
-        if($e instanceof EmailNotVerified || $e instanceof PasswordUnconfirmed) {
+        if($e instanceof EmailNotVerified || $e instanceof PasswordUnconfirmed || $e instanceof IsAuthenticatedException) {
             return;
         }
 

@@ -12,7 +12,7 @@ class HasVerifiedEmailTest extends TestCase
     /** @test */
     public function a_route_redirects_to_the_email_verification_page_if_not_verified(){
 
-        Route::middleware(['portal-auth', 'portal-verified'])->get('/test123', function() {
+        Route::middleware(['portal-auth'])->get('/test123', function() {
             return '';
         });
 

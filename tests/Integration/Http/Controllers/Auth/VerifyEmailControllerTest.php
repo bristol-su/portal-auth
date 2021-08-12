@@ -59,8 +59,8 @@ class VerifyEmailControllerTest extends TestCase
     /** @test */
     public function resend_flashes_a_message_to_the_session(){
 
-        $dataUser = factory(DataUser::class)->create(['email' => 'test@example.com']);
-        $controlUser = factory(User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'test@example.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id(), 'email_verified_at' => null]);
         $this->be($user, 'web');
 

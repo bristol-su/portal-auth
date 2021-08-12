@@ -44,4 +44,14 @@ class LogoutControllerTest extends TestCase
         $response->assertRedirect('http://localhost/login');
     }
 
+    /** @test */
+    public function it_logs_out_an_unauthenticated_user(){
+        $user = AuthenticationUser::factory()->create(['email_verified_at' => null]);
+        $this->be($user, 'web');
+        $this->assertAuthenticated();
+
+        $response = $this->post('/logout');
+
+        $this->assertGuest();
+    }
 }

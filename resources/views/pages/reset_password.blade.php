@@ -4,63 +4,69 @@
 
 @section('content')
 
-    <x-portal-card
-            title="Reset Password"
-            subtitle="Change your password">
-        <x-slot name="body">
-            <form action="{{$formUrl}}" method="POST">
-                @csrf
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Reset Password') }}</div>
+                    <div class="card-body">
+                        <form method="POST" action="{{$formUrl}}">
+                            @csrf
 
-                <x-portal-text
-                        id="identifier"
-                        name="identifier"
-                        :label="\Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue())"
-                        :errors="$errors->get('identifier')"
-                        :validated="$errors->has('identifier')"
-                        :required="true"
-                        :disabled="true"
-                        :value="$email"
-                >
+                            <div class="form-group row">
+                                <label for="identifier"
+                                       class="col-md-4 col-form-label text-md-right">{{ \Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()) }}</label>
 
-                </x-portal-text>
-
-                <x-portal-password
-                        id="password"
-                        name="password"
-                        label="Password"
-                        help="Enter a secure password to protect your account."
-                        sr-label="Enter a secure password to protect your account."
-                        :errors="$errors->get('password')"
-                        :validated="$errors->has('password')"
-                        :required="true"
-                >
-
-                </x-portal-password>
-
-                <x-portal-password
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        label="Confirm Password"
-                        help="Enter your password again."
-                        sr-label="Enter your password again."
-                        :errors="$errors->get('password_confirmation')"
-                        :validated="$errors->has('password_confirmation')"
-                        :required="true"
-                >
-
-                </x-portal-password>
-
-                <x-portal-button type="submit">
-                    Reset Password
-                </x-portal-button>
-
-            </form>
-        </x-slot>
-        <x-slot name="actions">
-        </x-slot>
-
-    </x-portal-card>
+                                <div class="col-md-6">
+                                    <input id="identifier" type="text"
+                                           class="form-control{{ $errors->has('identifier') ? ' is-invalid' : '' }}"
+                                           name="identifier" value="{{ (old('identifier') ?? (isset($identifier)?$identifier:null)) }}" required>
+                                    @if ($errors->has('identifier'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('identifier') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
 
 
+                            <div class="form-group row">
+                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+
+                                    @if ($errors->has('password'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Reset Password') }}
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

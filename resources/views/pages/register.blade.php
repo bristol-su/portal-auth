@@ -4,62 +4,116 @@
 
 @section('content')
 
-    <x-portal-card
-            title="Register">
-        <x-slot name="body">
-            <form action="{{route('register.action')}}" method="POST">
-                @csrf
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Register') }}</div>
 
-                <x-portal-text
-                        id="identifier"
-                        name="identifier"
-                        :label="\Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue())"
-                        help="Enter the {{\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()}} you would like to use to log in."
-                        sr-label="Enter the {{\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()}} you would like to use to log in."
-                        :errors="$errors->get('identifier')"
-                        :validated="$errors->has('identifier')"
-                        :required="true"
-                        :value="old('identifier')"
-                >
+                    <div class="card-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Create an account...</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
 
-                </x-portal-text>
 
-                <x-portal-password
-                        id="password"
-                        name="password"
-                        label="Password"
-                        help="Enter a secure password to protect your account."
-                        sr-label="Enter a secure password to protect your account."
-                        :errors="$errors->get('password')"
-                        :validated="$errors->has('password')"
-                        :required="true"
-                >
+                                        <form method="POST" action="{{ route('register.action') }}">
+                                            @csrf
 
-                </x-portal-password>
+                                            <div class="form-group row">
+                                                <label for="identifier"
+                                                       class="col-md-4 col-form-label text-md-right">{{ \Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()) }}</label>
 
-                <x-portal-password
-                        id="password_confirmation"
-                        name="password_confirmation"
-                        label="Confirm Password"
-                        help="Enter your password again."
-                        sr-label="Enter your password again."
-                        :errors="$errors->get('password_confirmation')"
-                        :validated="$errors->has('password_confirmation')"
-                        :required="true"
-                >
+                                                <div class="col-md-6">
+                                                    <input id="identifier" type="text"
+                                                           class="form-control{{ $errors->has('identifier') ? ' is-invalid' : '' }}"
+                                                           name="identifier" value="{{ old('identifier') }}" required>
 
-                </x-portal-password>
+                                                    @if ($errors->has('identifier'))
+                                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('identifier') }}</strong>
+                                    </span>
+                                                    @endif
+                                                </div>
+                                            </div>
 
-                <x-portal-button type="submit">
-                    Register
-                </x-portal-button>
+                                            <div class="form-group row">
+                                                <label for="password"
+                                                       class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
-            </form>
-        </x-slot>
-        <x-slot name="actions">
-            <x-portal-link href="{{route('login')}}">Login</x-portal-link>
-        </x-slot>
+                                                <div class="col-md-6">
+                                                    <input id="password" type="password"
+                                                           class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                                           name="password" required>
 
-    </x-portal-card>
+                                                    @if ($errors->has('password'))
+                                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="password-confirm"
+                                                       class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+
+                                                <div class="col-md-6">
+                                                    <input id="password-confirm" type="password" class="form-control"
+                                                           name="password_confirmation" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-6 offset-md-4">
+                                                    <button type="submit" class="btn btn-block btn-primary">
+                                                        {{ __('Create Account') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="form-group row">
+                                            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-xl-6 offset-md-4">
+                                                <a class="btn btn-link" href="{{ route('login') }}">
+                                                    {{ __('I have an account!') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if(count($social))
+                                <div class="col-md-3" style="border-left: 2px solid black">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Or login with...</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @foreach($social as $driver)
+                                                <a href="{{route('social.login', ['driver' => $driver])}}">
+                                                    <button type="button" variant="secondary">
+                                                        Login with {{\Illuminate\Support\Str::title($driver)}}
+                                                    </button>
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection

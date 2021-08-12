@@ -12,7 +12,7 @@ class RegisterDataUserUnitTest extends TestCase
 
     /** @test */
     public function it_creates_the_data_user_with_the_given_parameters_or_null_if_not_given(){
-        $dataUser = factory(DataUser::class)->create([
+        $dataUser = DataUser::factory()->create([
             'email' => 'test@example.com',
             'first_name' => 'Toby',
             'last_name' => 'Twigger',

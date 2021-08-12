@@ -6,6 +6,7 @@ use BristolSU\Auth\Social\SocialUser;
 use BristolSU\Auth\Tests\TestCase;
 use BristolSU\Auth\User\AuthenticationUser;
 use BristolSU\ControlDB\Models\DataUser;
+use BristolSU\ControlDB\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -21,17 +22,17 @@ class AuthenticationUserTest extends TestCase
 
     /** @test */
     public function controlUser_returns_the_control_user(){
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['id' => 1]);
+        $controlUser = User::factory()->create(['id' => 1]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
-        $this->assertInstanceOf(\BristolSU\ControlDB\Models\User::class, $user->controlUser());
+        $this->assertInstanceOf(User::class, $user->controlUser());
         $this->assertModelEquals($controlUser, $user->controlUser());
     }
 
     /** @test */
     public function routeNotificationForMail_returns_the_user_email(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@test.com']);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@test.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $this->assertEquals('example@test.com', $user->routeNotificationForMail());
@@ -39,8 +40,8 @@ class AuthenticationUserTest extends TestCase
 
     /** @test */
     public function getEmailForVerification_returns_the_user_email(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@test.com']);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@test.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $this->assertEquals('example@test.com', $user->getEmailForVerification());
@@ -50,8 +51,8 @@ class AuthenticationUserTest extends TestCase
     public function getEmailForVerification_throws_a_validation_exception_if_no_email_found(){
         $this->expectException(ValidationException::class);
 
-        $dataUser = factory(DataUser::class)->create(['email' => null]);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => null]);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $user->getEmailForVerification();
@@ -59,8 +60,8 @@ class AuthenticationUserTest extends TestCase
 
     /** @test */
     public function getEmailForPasswordReset_returns_the_user_email(){
-        $dataUser = factory(DataUser::class)->create(['email' => 'example@test.com']);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => 'example@test.com']);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $this->assertEquals('example@test.com', $user->getEmailForPasswordReset());
@@ -70,8 +71,8 @@ class AuthenticationUserTest extends TestCase
     public function getEmailForPasswordReset_throws_a_validation_exception_if_no_email_found(){
         $this->expectException(ValidationException::class);
 
-        $dataUser = factory(DataUser::class)->create(['email' => null]);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => null]);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $user = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $user->getEmailForPasswordReset();
@@ -80,8 +81,8 @@ class AuthenticationUserTest extends TestCase
     /** @test */
     public function findForPassport_returns_the_data_user_model_from_an_email_address(){
         $email = 'test@example.com';
-        $dataUser = factory(DataUser::class)->create(['email' => $email]);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => $email]);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
         $dbUser = AuthenticationUser::factory()->create(['control_id' => $controlUser->id()]);
 
         $foundUser = (new AuthenticationUser())->findForPassport($email);
@@ -100,7 +101,7 @@ class AuthenticationUserTest extends TestCase
     /** @test */
     public function findForPassport_returns_null_if_the_control_user_does_not_exist(){
         $email = 'test@example.com';
-        $dataUser = factory(DataUser::class)->create(['email' => $email]);
+        $dataUser = DataUser::factory()->create(['email' => $email]);
 
         $foundUser = (new AuthenticationUser())->findForPassport($email);
         $this->assertNull($foundUser);
@@ -109,8 +110,8 @@ class AuthenticationUserTest extends TestCase
     /** @test */
     public function findForPassport_returns_null_if_the_database_user_does_not_exist(){
         $email = 'test@example.com';
-        $dataUser = factory(DataUser::class)->create(['email' => $email]);
-        $controlUser = factory(\BristolSU\ControlDB\Models\User::class)->create(['data_provider_id' => $dataUser->id()]);
+        $dataUser = DataUser::factory()->create(['email' => $email]);
+        $controlUser = User::factory()->create(['data_provider_id' => $dataUser->id()]);
 
 
         $foundUser = (new AuthenticationUser())->findForPassport($email);

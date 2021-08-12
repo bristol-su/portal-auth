@@ -6,29 +6,34 @@
 
     @if(session()->has('messages'))
         @foreach(session()->get('messages') as $message)
-            <x-portal-alert :variant="$message['type']" :dismissible="true">
-                {{$message['message']}}
-            </x-portal-alert>
+            <div class="alert alert-{{$message['type']}}">{{$message['message']}}</div>
         @endforeach
     @endif
 
-    <x-portal-card
-            title="Verfication"
-            subtitle="We need to verify your email address">
-        <x-slot name="body">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Verify Your Email Address') }}</div>
 
-            You should have received an email with a link to verify your email. If you haven't received the email, click resend.
+                    <div class="card-body">
+                        @if (session('resent'))
+                            <div class="alert alert-success" role="alert">
+                                {{ __('A fresh verification link has been sent to your email address.') }}
+                            </div>
+                        @endif
 
-            <form action="{{route('verify.resend')}}" method="POST">
-                @csrf
-                <x-portal-button type="submit">
-                    Resend
-                </x-portal-button>
-            </form>
-        </x-slot>
-        <x-slot name="actions">
-        </x-slot>
-
-    </x-portal-card>
+                        {{ __('Before proceeding, please check your email for a verification link.') }}
+                        {{ __('If you did not receive the email') }}, <a
+                            href="#"
+                            onclick="event.preventDefault(); document.getElementById('resend-form').submit();"> {{ __('click here to request another') }}</a>,
+                        check your email address on <a href="https://bristolsu.org.uk">our website</a> or <a href="mailto:bristol-su@bristol.ac.uk">contact us</a>
+                        <form id="resend-form" action="{{ route('verify.resend') }}" method="POST"
+                              style="display: none;">@csrf</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
