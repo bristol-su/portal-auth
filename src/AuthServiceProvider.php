@@ -33,6 +33,8 @@ use BristolSU\Auth\Settings\Access\AccessGroup;
 use BristolSU\Auth\Settings\Messaging\AlreadyRegisteredMessage;
 use BristolSU\Auth\Settings\Messaging\ControlUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
+use BristolSU\Auth\Settings\Messaging\LoginHeader;
+use BristolSU\Auth\Settings\Messaging\LoginSubtitle;
 use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Settings\Security\SecurityGroup;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
@@ -129,6 +131,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         Passport::withoutCookieSerialization();
 
+        $this->publishes([
+            __DIR__ . '/../public/modules/portal-auth' => public_path('modules/portal-auth')
+        ], ['module', 'module-assets', 'assets', 'portal-auth']);
+
         $this->app['router']->pushMiddlewareToGroup('portal-auth', HasVerifiedEmail::class);
         $this->app['router']->aliasMiddleware('portal-not-verified', HasNotVerifiedEmail::class);
         $this->app['router']->aliasMiddleware('socialite', LoadsSocialite::class);
@@ -156,7 +162,9 @@ class AuthServiceProvider extends ServiceProvider
             ->group(new SecurityGroup())
             ->registerSetting(new ControlUserRegistrationNotAllowedMessage())
             ->registerSetting(new DataUserRegistrationNotAllowedMessage())
-            ->registerSetting(new AlreadyRegisteredMessage());
+            ->registerSetting(new AlreadyRegisteredMessage())
+            ->registerSetting(new LoginHeader())
+            ->registerSetting(new LoginSubtitle());
 
         $this->registerSettings()
             ->category(new SocialDriversCategory())
