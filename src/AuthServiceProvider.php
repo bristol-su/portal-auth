@@ -35,6 +35,7 @@ use BristolSU\Auth\Settings\Messaging\ControlUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Messaging\LoginHeader;
 use BristolSU\Auth\Settings\Messaging\LoginSubtitle;
+use BristolSU\Auth\Settings\Messaging\RegisterSubtitle;
 use BristolSU\Auth\Settings\Security\PasswordConfirmationTimeout;
 use BristolSU\Auth\Settings\Security\SecurityGroup;
 use BristolSU\Auth\Settings\Security\ShouldVerifyEmail;
@@ -163,8 +164,8 @@ class AuthServiceProvider extends ServiceProvider
             ->registerSetting(new ControlUserRegistrationNotAllowedMessage())
             ->registerSetting(new DataUserRegistrationNotAllowedMessage())
             ->registerSetting(new AlreadyRegisteredMessage())
-            ->registerSetting(new LoginHeader())
-            ->registerSetting(new LoginSubtitle());
+            ->registerSetting(new LoginSubtitle())
+            ->registerSetting(new RegisterSubtitle());
 
         $this->registerSettings()
             ->category(new SocialDriversCategory())

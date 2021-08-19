@@ -7,20 +7,20 @@ namespace BristolSU\Auth\Settings\Messaging;
 use BristolSU\Support\Settings\Definition\GlobalSetting;
 use FormSchema\Schema\Field;
 
-class LoginHeader extends GlobalSetting
+class RegisterSubtitle extends GlobalSetting
 {
 
     public function fieldOptions(): Field
     {
         return \FormSchema\Generator\Field::textInput($this->inputName())
-            ->setLabel('Login Page Header')
+            ->setLabel('Register Page Subtitle')
             ->setValue($this->defaultValue())
-            ->setHint('The text to show to the user on the login page');
+            ->setHint('The subtitle to show to the user on the login page');
     }
 
     public function defaultValue()
     {
-        return 'Login';
+        return 'Please register here';
     }
 
     public function rules(): array
@@ -33,6 +33,6 @@ class LoginHeader extends GlobalSetting
 
     public function key(): string
     {
-        return 'authentication.messaging.login-header';
+        return 'authentication.messaging.register-subtitle';
     }
 }

@@ -1,72 +1,29 @@
-@extends('bristolsu::base')
+@extends('portal-auth::layout')
 
 @section('title', 'Reset Password')
 
-@section('content')
+@section('auth-content')
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Reset Password') }}</div>
-                    <div class="card-body">
-                        <form method="POST" action="{{$formUrl}}">
-                            @csrf
+    @if(session()->has('messages'))
+        @foreach(session()->get('messages') as $message)
+            <div class="alert alert-{{$message['type']}}">{{$message['message']}}</div>
+        @endforeach
+    @endif
 
-                            <div class="form-group row">
-                                <label for="identifier"
-                                       class="col-md-4 col-form-label text-md-right">{{ \Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()) }}</label>
+    <p-featured-card
+        title="Reset Password"
+        bg="login-page"
+    >
+        <register-form
+            button-text="Reset Password"
+            route="{{$formUrl}}"
+            identifier-value="{{$email}}"
+            identifier="{{ \Illuminate\Support\Str::title(\BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue()) }}"
+            identifier-key="{{ \BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue() }}"
+        >
+        </register-form>
 
-                                <div class="col-md-6">
-                                    <input id="identifier" type="text"
-                                           class="form-control{{ $errors->has('identifier') ? ' is-invalid' : '' }}"
-                                           name="identifier" value="{{ (old('identifier') ?? (isset($identifier)?$identifier:null)) }}" required>
-                                    @if ($errors->has('identifier'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('identifier') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
+    </p-featured-card>
 
-
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                    @if ($errors->has('password'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Reset Password') }}
-                                    </button>
-                                </div>
-                            </div>
-
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 @endsection

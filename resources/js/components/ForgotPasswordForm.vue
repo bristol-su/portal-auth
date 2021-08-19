@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: "LoginForm",
+    name: "ForgotPasswordForm",
     props: {
         route: {
             required: true, type: String
@@ -24,14 +24,9 @@ export default {
                 .withGroup(this.$tools.generator.group.newGroup()
                     .withField(this.$tools.generator.field.text('identifier')
                         .label(this.identifier)
-                        .hint('Enter the ' + this.identifierKey + ' you used to register.')
+                        .hint('Enter your ' + this.identifierKey)
                         .required(true)
-                    ).withField(this.$tools.generator.field.password('password')
-                        .label('Password')
-                        .hint('Enter your password')
-                        .required(true)
-                    ).withField(this.$tools.generator.field.checkbox('remember')
-                        .label('Remember Me'))
+                    )
                 )
                 .generate()
                 .asJson();
