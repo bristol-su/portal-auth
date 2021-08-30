@@ -23,12 +23,13 @@
                     identifier-key="{{ \BristolSU\Auth\Settings\Credentials\IdentifierAttribute::getValue() }}"
                 >
                 </login-form>
-                <a href="{{ route('password.forgot') }}">
+                <p-button variant="secondary" href="{{ route('password.forgot') }}">
                     Forgot your password?
-                </a>
-                <a href="{{ route('register') }}">
+                </p-button>
+
+                <p-button variant="secondary" href="{{ route('register') }}">
                     I'm new here!
-                </a>
+                </p-button>
             </p-tab>
             @if(count($social))
                 <p-tab title="social-login">
