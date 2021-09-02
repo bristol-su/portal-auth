@@ -11,6 +11,7 @@
     @endif
 
     <p-featured-card
+        logo="{{ asset('images/logo.png') }}"
         title="Verify your email address"
         bg="login-page"
     >
