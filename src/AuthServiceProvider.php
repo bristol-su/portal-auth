@@ -30,6 +30,7 @@ use BristolSU\Auth\Settings\Credentials\CredentialsGroup;
 use BristolSU\Auth\Settings\Credentials\IdentifierAttribute;
 use BristolSU\Auth\Settings\Access\DefaultHome;
 use BristolSU\Auth\Settings\Access\AccessGroup;
+use BristolSU\Auth\Settings\Credentials\IdentifierAttributeValidation;
 use BristolSU\Auth\Settings\Messaging\AlreadyRegisteredMessage;
 use BristolSU\Auth\Settings\Messaging\ControlUserRegistrationNotAllowedMessage;
 use BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage;
@@ -143,7 +144,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerSettings()
             ->category(new AuthCategory())
             ->group(new CredentialsGroup())
-            ->registerSetting(new IdentifierAttribute());
+            ->registerSetting(new IdentifierAttribute())
+            ->registerSetting(new IdentifierAttributeValidation());
 
         $this->registerSettings()
             ->category(new AuthCategory())
