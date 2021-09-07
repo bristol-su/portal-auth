@@ -29,16 +29,7 @@ class MigratePortalAuthSettingValues extends Migration
         'authentication.authorization.requiredAlreadyInData' => \BristolSU\Auth\Settings\Access\DataUserRegistrationEnabled::getKey(),
         'authentication.messages.notInData' => \BristolSU\Auth\Settings\Messaging\DataUserRegistrationNotAllowedMessage::getKey(),
         'authentication.messages.notInControl' => \BristolSU\Auth\Settings\Messaging\ControlUserRegistrationNotAllowedMessage::getKey(),
-        'authentication.messages.alreadyRegistered' => \BristolSU\Auth\Settings\Messaging\AlreadyRegisteredMessage::getKey(),
-
-        'welcome.fillInRegInformation' => '', ///DELETE,
-            'welcome.messages.title' =>  '', ///DELETE,
-            'welcome.messages.subtitle' =>  '', ///DELETE,
-        'welcome.attributes' =>  '', ///DELETE,
-
-        'thirdPartyAuthentication.providers' => '', //DELETE
-        'pageText.footer' => \App\Settings\Appearance\Messaging\Footer::getKey(),
-        'pageText.landing' => \App\Settings\Appearance\Messaging\LandingPageTitle::getKey(),
+        'authentication.messages.alreadyRegistered' => \BristolSU\Auth\Settings\Messaging\AlreadyRegisteredMessage::getKey()
     ];
     }
 
