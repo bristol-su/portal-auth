@@ -11,6 +11,7 @@
     @endif
 
     <p-featured-card
+        logo="{{ asset('/images/logo.png') }}"
         title="Forgot Password"
         bg="login-page"
     >

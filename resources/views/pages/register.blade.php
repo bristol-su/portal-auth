@@ -11,6 +11,7 @@
     @endif
 
     <p-featured-card
+        logo="{{ asset('images/logo.png') }}"
         title="Register"
         subtext="{{\BristolSU\Auth\Settings\Messaging\RegisterSubtitle::getValue()}}"
         bg="login-page"
