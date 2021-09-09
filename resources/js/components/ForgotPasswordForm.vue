@@ -1,5 +1,5 @@
 <template>
-    <p-submit-form method="post" :action="route" :schema="form">
+    <p-submit-form method="post" :action="route" :schema="form" button-text="Send reset email">
 
     </p-submit-form>
 </template>
