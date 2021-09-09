@@ -20,13 +20,16 @@ export default {
     },
     computed: {
         form() {
+            let identifierField = this.$tools.generator.field.text('identifier')
+                .label(this.identifier)
+                .hint('Enter your ' + this.identifierKey)
+                .required(true);
+            if(this.identifierKey === 'email') {
+                identifierField.autocomplete('email');
+            }
             return this.$tools.generator.form.newForm()
                 .withGroup(this.$tools.generator.group.newGroup()
-                    .withField(this.$tools.generator.field.text('identifier')
-                        .label(this.identifier)
-                        .hint('Enter your ' + this.identifierKey)
-                        .required(true)
-                    )
+                    .withField(identifierField)
                 )
                 .generate()
                 .asJson();

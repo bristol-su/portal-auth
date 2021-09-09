@@ -26,15 +26,19 @@ export default {
     },
     computed: {
         form() {
+            let identifierField = this.$tools.generator.field.text('identifier')
+                .label(this.identifier)
+                .hint('Enter your ' + this.identifierKey)
+                .required(true)
+                .value(this.identifierValue)
+                .disabled(true);
+            if(this.identifierKey === 'email') {
+                identifierField.autocomplete('email');
+            }
             return this.$tools.generator.form.newForm()
                 .withGroup(this.$tools.generator.group.newGroup()
-                    .withField(this.$tools.generator.field.text('identifier')
-                        .label(this.identifier)
-                        .hint('Enter your ' + this.identifierKey)
-                        .required(true)
-                        .value(this.identifierValue)
-                        .disabled(true)
-                    ).withField(this.$tools.generator.field.password('password')
+                    .withField(identifierField)
+                    .withField(this.$tools.generator.field.password('password')
                         .label('Password')
                         .hint('Enter a secure password')
                         .required(true)

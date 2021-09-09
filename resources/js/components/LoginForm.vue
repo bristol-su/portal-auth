@@ -20,13 +20,17 @@ export default {
     },
     computed: {
         form() {
+            let identifierField = this.$tools.generator.field.text('identifier')
+                .label(this.identifier)
+                .hint('Enter the ' + this.identifierKey + ' you used to register.')
+                .required(true);
+            if(this.identifierKey === 'email') {
+                identifierField.autocomplete('email');
+            }
             return this.$tools.generator.form.newForm()
                 .withGroup(this.$tools.generator.group.newGroup()
-                    .withField(this.$tools.generator.field.text('identifier')
-                        .label(this.identifier)
-                        .hint('Enter the ' + this.identifierKey + ' you used to register.')
-                        .required(true)
-                    ).withField(this.$tools.generator.field.password('password')
+                    .withField(identifierField)
+                    .withField(this.$tools.generator.field.password('password')
                         .label('Password')
                         .hint('Enter your password')
                         .required(true)
