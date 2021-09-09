@@ -22,9 +22,12 @@
             <form id="resend-form" action="{{ route('verify.resend') }}" method="POST"
                   style="display: none;">@csrf</form>
 
-            <p-button variant="primary" href="{{ route('login') }}">
+            <p-button variant="primary" @click="event.preventDefault(); document.getElementById('portal-auth-logout-form').submit();">
                 Back to Login
             </p-button>
+
+            <form id="portal-auth-logout-form" action="{{ route('logout') }}" method="POST"
+                  style="display: none;">@csrf</form>
 
         </div>
     </p-featured-card>
