@@ -4,12 +4,6 @@
 
 @section('auth-content')
 
-    @if(session()->has('messages'))
-        @foreach(session()->get('messages') as $message)
-            <div class="alert alert-{{$message['type']}}">{{$message['message']}}</div>
-        @endforeach
-    @endif
-
     <p-featured-card
         logo="{{ asset('images/logo.png') }}"
         title="Register"
