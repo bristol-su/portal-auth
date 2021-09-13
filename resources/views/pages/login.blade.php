@@ -10,6 +10,7 @@
         subtext="{{\BristolSU\Auth\Settings\Messaging\LoginSubtitle::getValue()}}"
         bg="login-page"
     >
+        <div class="w-full">
         <p-tabs>
             <p-tab title="Login">
                 <login-form
@@ -38,6 +39,6 @@
                 </p-tab>
             @endif
         </p-tabs>
-
+        </div>
     </p-featured-card>
 @endsection
