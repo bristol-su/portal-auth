@@ -2,7 +2,7 @@ const mix = require('laravel-mix');
 
 mix.setPublicPath('./public');
 
-mix.js('resources/js/auth.js', 'public/modules/portal-auth/js');
+mix.js('resources/js/auth.js', 'public/modules/portal-auth/js').vue();
 
 if(!mix.inProduction()) {
     mix.sourceMaps();
