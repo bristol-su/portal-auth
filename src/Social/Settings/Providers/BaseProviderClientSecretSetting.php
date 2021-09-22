@@ -35,9 +35,7 @@ abstract class BaseProviderClientSecretSetting extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::input($this->inputName())
-            ->inputType('password')
-            ->label('Client Secret')
-            ->getSchema();
+        return \FormSchema\Generator\Field::textInput($this->inputName())
+            ->setLabel('Client Secret');
     }
 }

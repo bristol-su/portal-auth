@@ -12,8 +12,10 @@ class RegistrationEnabled extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::checkBox($this->inputName())
+        return \FormSchema\Generator\Field::switch($this->inputName())
             ->setLabel('Enable Registration')
+            ->setOffText('Cannot register')
+            ->setOnText('Can register')
             ->setValue($this->defaultValue())
             ->setHint('Allow users to register to the site')
             ->setTooltip('You can still control who is allowed to register using other controls. This turns off registration for everyone');

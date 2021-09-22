@@ -30,12 +30,13 @@ abstract class BaseProviderEnabledSetting extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::checkBox($this->inputName())
-            ->label('Login enabled?')
-            ->default($this->defaultValue())
-            ->hint(sprintf('Should users be able to log in through %s', $this->driver()))
-            ->help('Make sure you set up the client ID and secret before enabling this')
-            ->getSchema();
+        return \FormSchema\Generator\Field::switch($this->inputName())
+            ->setLabel('Login enabled?')
+            ->setValue($this->defaultValue())
+            ->setHint(sprintf('Should users be able to log in through %s', $this->driver()))
+            ->setTooltip('Make sure you set up the client ID and secret before enabling this')
+            ->setOnText('Enabled')
+            ->setOffText('Disabled');
     }
 
     abstract public function driver(): string;

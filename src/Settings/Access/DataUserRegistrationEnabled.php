@@ -12,8 +12,10 @@ class DataUserRegistrationEnabled extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::checkBox($this->inputName())
+        return \FormSchema\Generator\Field::switch($this->inputName())
             ->setLabel('Can data users register?')
+            ->setOnText('Can register')
+            ->setOffText('Cannot register')
             ->setValue($this->defaultValue())
             ->setHint('Allow data users to register to allow any email address to create an account')
             ->setTooltip('A data user holds personal data about your users, for example their name or email ' .
