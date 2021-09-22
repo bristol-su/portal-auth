@@ -22,13 +22,11 @@ class DefaultHome extends UserSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::input($this->inputName())
-            ->inputType('text')
-            ->label('Route Home')
-            ->default($this->defaultValue())
-            ->hint('The default route to send logged in users to')
-            ->help('This must be the name of a route')
-            ->getSchema();
+        return \FormSchema\Generator\Field::textInput($this->inputName())
+            ->setLabel('Route Home')
+            ->setValue($this->defaultValue())
+            ->setHint('The default route to send logged in users to')
+            ->setTooltip('This must be the name of a route');
     }
 
     public function rules(): array

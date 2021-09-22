@@ -28,13 +28,12 @@ class IdentifierAttribute extends GlobalSetting
     public function fieldOptions(): Field
     {
         return \FormSchema\Generator\Field::select($this->inputName())
-            ->label('Identifier')
-            ->default($this->defaultValue())
-            ->hint('The attribute users can use to log in')
-            ->help('You can choose multiple fields to allow users to log in with any field')
-            ->values([
-                ['id' => 'email', 'name' => 'Email Address']
-            ])
-            ->getSchema();
+            ->setLabel('Identifier')
+            ->setValue($this->defaultValue())
+            ->setHint('The attribute users can use to log in')
+            ->setTooltip('You can choose multiple fields to allow users to log in with any field')
+            ->setSelectOptions([
+                ['id' => 'email', 'value' => 'Email Address']
+            ]);
     }
 }

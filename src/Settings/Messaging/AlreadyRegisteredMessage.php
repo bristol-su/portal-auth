@@ -12,12 +12,10 @@ class AlreadyRegisteredMessage extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::input($this->inputName())
-            ->inputType('text')
-            ->label('Already Registered Message')
-            ->default($this->defaultValue())
-            ->hint('The message to show a user on registration when they\'ve already registered')
-            ->getSchema();
+        return \FormSchema\Generator\Field::textInput($this->inputName())
+            ->setLabel('Already Registered Message')
+            ->setValue($this->defaultValue())
+            ->setHint('The message to show a user on registration when they\'ve already registered');
     }
 
     public function defaultValue()

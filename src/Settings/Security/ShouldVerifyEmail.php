@@ -15,12 +15,13 @@ class ShouldVerifyEmail extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::checkBox($this->inputName())
-            ->label('Email Verification Required?')
-            ->default($this->defaultValue())
-            ->hint('Should a user have to verify their email address?')
-            ->help('We highly recommend turning this on provide security when registering.')
-            ->getSchema();
+        return \FormSchema\Generator\Field::switch($this->inputName())
+            ->setLabel('Email Verification Required?')
+            ->setValue($this->defaultValue())
+            ->setOnText('Verification required')
+            ->setOffText('Verification not required')
+            ->setHint('Should a user have to verify their email address?')
+            ->setTooltip('We highly recommend turning this on provide security when registering.');
     }
 
     public function defaultValue()

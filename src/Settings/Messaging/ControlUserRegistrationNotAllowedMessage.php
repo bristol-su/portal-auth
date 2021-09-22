@@ -12,12 +12,10 @@ class ControlUserRegistrationNotAllowedMessage extends GlobalSetting
 
     public function fieldOptions(): Field
     {
-        return \FormSchema\Generator\Field::input($this->inputName())
-            ->inputType('text')
-            ->label('Control User Registration - Error Message')
-            ->default($this->defaultValue())
-            ->hint('The message to show to a user when they haven\'t been able to register because control registration is disabled')
-            ->getSchema();
+        return \FormSchema\Generator\Field::textInput($this->inputName())
+            ->setLabel('Control User Registration - Error Message')
+            ->setValue($this->defaultValue())
+            ->setHint('The message to show to a user when they haven\'t been able to register because control registration is disabled');
     }
 
     public function defaultValue()
