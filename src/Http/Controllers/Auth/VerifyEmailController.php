@@ -39,7 +39,7 @@ class VerifyEmailController extends Controller
         event(new UserVerificationRequestGenerated($resolver->getUser()));
 
         $messages = session()->get('messages', []);
-        $messages[] = ['type' => 'success', 'message' => 'We\'ve sent another verification email to test@example.com'];
+        $messages[] = ['type' => 'success', 'message' => 'We\'ve sent another verification email to ' . $resolver->getUser()->controlUser()->data()->email()];
         session()->flash('messages', $messages);
 
         return redirect()->route('verify.notice');

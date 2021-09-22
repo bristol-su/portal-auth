@@ -30,7 +30,6 @@ class ResetPasswordController extends Controller
 
     public function showForm(Request $request)
     {
-
         $user = $this->getUser($request);
 
         return view('portal-auth::pages.reset_password')->with([

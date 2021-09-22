@@ -17,6 +17,7 @@ use BristolSU\ControlDB\Models\DataUser;
 use BristolSU\ControlDB\Models\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RegisterControllerTest extends TestCase
 {
@@ -54,13 +55,17 @@ class RegisterControllerTest extends TestCase
         $response->assertRedirect('/portal-new');
     }
 
-    /** @test */
-    public function GETregister_returns_the_registration_disabled_view_if_registration_disabled(){
+    /**
+     * @test
+     *@
+     */
+    public function GETregister_throws_an_exception_if_registration_disabled(){
         ShouldVerifyEmail::setValue(false);
         RegistrationEnabled::setValue(false);
 
         $response = $this->get('/register');
-        $response->assertViewIs('portal-auth::errors.registration_disabled');
+        $exception = $response->exception;
+        $this->assertInstanceOf(HttpException::class, $exception);
     }
 
     /** @test */

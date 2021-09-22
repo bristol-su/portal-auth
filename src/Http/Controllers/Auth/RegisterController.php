@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Handle registration of a user
@@ -31,16 +32,19 @@ class RegisterController extends Controller
     /**
      * Show the application registration form.
      *
+     * @param DriverStore $driverStore
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
+     * @throws HttpException
      */
     public function showRegistrationForm(DriverStore $driverStore)
     {
-        if(RegistrationEnabled::getValue()) {
-            return view('portal-auth::pages.register', [
-                'social' => $driverStore->allEnabled()
-            ]);
+        if(!RegistrationEnabled::getValue()) {
+            throw new HttpException(403, 'Registration has been disabled');
         }
-        return view('portal-auth::errors.registration_disabled');
+
+        return view('portal-auth::pages.register', [
+            'social' => $driverStore->allEnabled()
+        ]);
     }
 
     /**

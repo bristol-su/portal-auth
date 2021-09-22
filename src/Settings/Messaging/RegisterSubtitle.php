@@ -7,20 +7,20 @@ namespace BristolSU\Auth\Settings\Messaging;
 use BristolSU\Support\Settings\Definition\GlobalSetting;
 use FormSchema\Schema\Field;
 
-class AlreadyRegisteredMessage extends GlobalSetting
+class RegisterSubtitle extends GlobalSetting
 {
 
     public function fieldOptions(): Field
     {
         return \FormSchema\Generator\Field::textInput($this->inputName())
-            ->setLabel('Already Registered Message')
+            ->setLabel('Register Page Subtitle')
             ->setValue($this->defaultValue())
-            ->setHint('The message to show a user on registration when they\'ve already registered');
+            ->setHint('The subtitle to show to the user on the login page');
     }
 
     public function defaultValue()
     {
-        return 'You have already registered!';
+        return 'Please register here';
     }
 
     public function rules(): array
@@ -33,6 +33,6 @@ class AlreadyRegisteredMessage extends GlobalSetting
 
     public function key(): string
     {
-        return 'authentication.messaging.already-registered';
+        return 'authentication.messaging.register-subtitle';
     }
 }

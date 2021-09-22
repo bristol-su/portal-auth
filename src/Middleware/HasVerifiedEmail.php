@@ -28,7 +28,6 @@ class HasVerifiedEmail
      * @param Request $request
      * @param Closure $next
      * @return mixed
-     * @throws PasswordUnconfirmed
      */
     public function handle($request, Closure $next)
     {
