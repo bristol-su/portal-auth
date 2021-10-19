@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.0.1] - (19/10/2021)
+
 ### Fixed
 - Route registration failed due to using new format
 
-## [v1.0.0] - (18/10/2021)
+## [v1.0.0] - (18/09/2021)
 
 ### Added
 - Upgrade migrations
